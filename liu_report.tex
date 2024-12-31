@@ -12,7 +12,8 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{graphicx} 
 \graphicspath{ {./figures/}, {/Users/luducheng/Documents/templates/logos/OBSPM/LERMA/RGB - RVB/Noir/}} 
-\usepackage{tabularx, makecell}
+
+\usepackage{tabularx, makecell, booktabs}
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{enumitem}
@@ -35,7 +36,9 @@
 
 % citations
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
-\usepackage[backend=biber, citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,isbn=false,url=false,eprint=false,date=year,maxcitenames=2,uniquelist=minyear,sorting=ynt]{biblatex}
+\usepackage[backend=biber,citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,isbn=false,url=false,eprint=false,date=year,maxcitenames=2,giveninits=true,uniquelist=minyear,sorting=nyt]{biblatex}
+\DeclareNameAlias{default}{family-given}
+\DeclareNameAlias{sortname}{family-given}
 \addbibresource{./pdr_references.bib}
 \input{/Users/luducheng/Documents/templates/asstex} % to compile on my computer
 % \input{asstex}
@@ -133,12 +136,12 @@ Models have long been developed to help us interpret these
 The 1D slab geometry may not be approprioate in some cases, and the curvature of the cloud surface needs to be taken into account in order to reproduce the line profiles. A common technique is to use a time-dependent hydrodynamic simulation to obtain the density and velocity fields and then to postprocess it with a PDR code to obtain the steady-state chemical abundances and thermal equilibrium gas temperature (e.g., Levrier et al. 2012).
 
 \subsection{Photodissociation Regions (PDRs)}
-Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemistry or heating processes. \qt{cite Tielens \& Hollenbach 1985a, Introduction in the annual review} PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
+Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemistry or heating processes\parencite{Tielens1985}. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
 
 \begin{figure}
     \centering
     \includegraphics[width=.7\textwidth,keepaspectratio]{figures/PDRScheme_Wolfire2022fig2.png}
-    \caption{Schematic of a photodissociation region as a function of visual extinction $A_V$. Reprinted from \textcite{Wolfire_2022}.}
+    \caption{Schematic of a photodissociation region as a function of visual extinction $A_V$. Reprinted from \textcite{Wolfire2022}.}
 \end{figure}
 \subsection{The Horsehead Nebula}
 \begin{figure}
@@ -158,43 +161,121 @@ In order to compare with observations, we need to convert the distance unit \uni
 \begin{equation}
     \alpha["] = \frac{d\,[\unit{pc}]}{400\,\unit{pc}} \frac{1\,\unit{arcsec}}{1\,\unit{rad}}\textbf{}
 \end{equation}
-where \qty{400}{pc} \parencite{Menten_2007, Schlafly_2014} is the distance to the horsehead nebula.
+where \qty{400}{pc} \parencite{Menten2007, Schlafly2014} is the distance to the horsehead nebula.
 
 \section{Data}
-In this report, my goal is to compare the observations of the Horsehead Nebula with the predictions of the \mdpdr{}. The observations were taken with \qt{Herschel}. The data were taken from the original paper \qt{add citation}.
-% talk about Herschel
+The observational data used in this study (Fig.~\ref{fig:observation}) were obtained from the Heterodyne Instrument for the Far-Infrared (HIFI) \parencite{deGraauw2010} onboard the Herschel Space Observatory \parencite{Pilbratt2010}. All data are convolved to the spatial resolution of the HIFI H2O data, $38.1$ arcsec. The observed molecular species were detected at specific wavelengths corresponding to transitions listed in Table~\ref{tab:lines}. 
+
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{observed_lines.pdf}
-    \caption{Observed line profiles of the Horsehead Nebula. Reproduced from \qt{cite the original paper}. The \ce{^{13}CO} lines has been removed due to bad weather condition during the observation.} \label{fig:observation}
+    \caption{Observed line profiles of the Horsehead Nebula by Herschel HIFI. Reproduced from \qt{cite the original paper}. \qt{?The \ce{^{13}CO} lines has been removed due to bad weather condition during the observation.}} \label{fig:observation}
 \end{figure}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{cclll}
+        \midrule
+        \midrule
+        Notation & Species & Upper Level & Lower Level & Frequency (\unit{GHz}) \\
+        \midrule
+        \ce{H2O}            & \ce{H2O}  & J=1, Ka=1, Kc=0 & J=1, Ka=0, Kc=1 & 557.30 \\
+        \ce{C[II]}          & \ce{C+}   & 2P J=3/2 & 2P J=1/2 & 1902.59 \\
+        \ce{C[I]}           & \ce{C}    & 3P J=1 & 3P J=0 & 492.02 \\
+        \ce{^{12}CO} (2-1)  & \ce{CO}   & v=0, J=2 & v=0, J=1 & 230.538 \\
+        \ce{^{12}CO} (4-3)  & \ce{CO}   & v=0, J=4 & v=0, J=3 & 461.041 \\
+        \ce{^{13}CO} (2-1)  & \ce{^{13}CO} & v=0, J=2 & v=0, J=1 & 220.399 \\
+        \ce{C^{18}O} (2-1)  & \ce{C^{18}O} & v=0, J=2 & v=0, J=1 & 219.560 \\
+        \midrule
+        \bottomrule
+    \end{tabular}
+    \caption{Parameters of transitions in the observation data used in this study.} \label{tab:lines}
+\end{table}
+
+% The observational data used in this study were obtained from the [Name of Survey or Telescope], which observed the Horsehead Nebula at millimeter and infrared wavelengths. These observations focus on the molecular gas in the nebula, particularly the abundances and temperature of key species such as \(\ce{H2}\), \(\ce{CO}\), and \(\ce{H2O}\). The observations provide high-resolution spectra and spatial data, allowing us to examine the molecular structure of the nebula at various depths.
+
+% The data were obtained with a spatial resolution of [x] arcseconds and a spectral resolution of [y] km/s. The observed molecular species were detected at specific wavelengths corresponding to rotational transitions of \(\ce{H2}\), \(\ce{CO}\), and \(\ce{H2O}\). These observations provide valuable insights into the molecular abundances and gas temperature at different layers of the nebula.
 
 
 \section{Methods}
 \subsection{The \mdpdr{}}
 % first, ISM models in general
 % caveats? PDR annual review section 5.5
-A significant heterogeneity exists among the available PDR models, which differ in their geometry, physical and chemical structures, and model parameters. \qt{Röllig et al. (2007)} suggest that the choice of a spedific code should depend on the physical and chemical processes implemented in the code, as well as the characteristics of the emission source. 
+A significant heterogeneity exists among the available PDR models, which differ in their geometry, physical and chemical structures, and model parameters. \textcite{Röllig2007} suggest that the choice of a spedific code should depend on the physical and chemical processes implemented in the code, as well as the characteristics of the emission source. 
 
-In this project, I used the \mdpdr{} \parencite{LePetit_2006,Goicoechea_2007,Gonzalez_2008,LeBourlot_2012,Bron_thesis,Bron_2014,Bron_2016} to simulate the Horsehead Nebula. The \mdpdr{} models a stationary one-dimensional (1D), plane-parallel slab of gas and dust illuminated by an ultraviolet (UV) radiation field from one or both sides. At each iteration, the code solves the UV radiative transfer in both the continuum and lines, followed by the chemical balance, and finally the level populations and thermal balance. The code outputs the level populations, the gas temperature, and the chemical abundances as a function of the depth into the cloud, with optional output of the radiation field.
+In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonzalez2008,LeBourlot2012,Bron_thesis,Bron2014,Bron2016} to simulate the Horsehead Nebula. The \mdpdr{} models a stationary one-dimensional (1D), plane-parallel slab of gas and dust illuminated by an ultraviolet (UV) radiation field from one or both sides (Fig.~\ref{fig:1Dgeometry}). At each iteration, the code solves the UV radiative transfer in both the continuum and lines, followed by the chemical balance, and finally the level populations and thermal balance. The code outputs the level populations, the gas temperature, and the chemical abundances as a function of the depth into the cloud, with optional output of the radiation field. The physical parameters used to model the Horsehead PDR are summarized in Table~\ref{tab:params}.
 
-\subsubsection{Constant Pressure vs. Constant Density}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ll}
+        \midrule
+        \midrule
+        Cloud size ($A_V$\footnotemark[1]) & 40 \\
+        Proton density\footnotemark[2] ($n_H$) & \qtyrange[range-units=single,range-phrase=~--~]{3e4}{3e6}{cm^{-3}}\\
+        Pressure\footnotemark[2] ($P$) & \qtyrange[range-units=single,range-phrase=~--~]{1e6}{1e7}{K\,cm^{-3}} \\
+        ISRF & shape: Mathis\footnotemark[3], geometry: beam\_isot\footnotemark[4] \\
+        ISRF scaling factor & $G_0^\mr{obs} = 100,\ G_0^\mr{back} = 0.04$\footnotemark[5]\\
+        UV radiative transfer method & FGK approximation, or\\
+        & exact \ce{H2} self- and mutual shielding\footnotemark[6] \\
+        Turbulent velocity dispersion & \qty{2}{\km\per\second}\footnotemark[7] \\
+        Extinction Curve & HD38087\footnotemark[8]\\
+        $R_V = A_V / E(B-V)$ & $5.50$ \\
+        $C_D = N_H / E(B-V)$ & $1.57\times 10^{22}$\\
+        \bottomrule
+    \end{tabular}
+    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, $A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})$.  \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models(see Section~\ref{sec:cstnp}). \textsuperscript{3}\textcite{Mathis1983}. \textsuperscript{4}Perpendicular on observer side, isotropic on back side. \textsuperscript{5}In Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6} See Section.~\ref{sec:exactrt}. \textsuperscript{7}Only used in Doppler line broadening. \textsuperscript{8}\textcite{Fitzpatrick1990}. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mdpdr{} documentation}.} \label{tab:params}
 
-The density structure of the PDR model, such as constant density, constant pressure, or a density profile specified by the user, can have a significant influence on the simulation results. Observations reveal that there is a steep density gradient in the PDRs of the Horsehead Nebula \qt{(Habart et al. 2005; Guzmán et al. 2011) in C. Hernández-Vera 2023}. \qt{Hernández-Vera 2023} verified that the observations cannot be reproduced by a constant density model, yet neither by previously proposed density profile prescriptions. Later, observations by ALMA and Herschel suggest that the warm layer of PDRs is indeed isobaric with relatively large thermal pressures \qt{(Marconi et al. 1998; Goicoechea et al. 2016; Joblin et al. 2018; Wu et al. 2018; Bron et al. 2018; Maillard et al. 2021)}. For this reason, we use the constant pressure model in the \mdpdr{}.
-
-The density structure of a photodissociation region model—whether constant density, constant pressure, or a user-defined density profile—can significantly influence the simulation results \qt{cite annual review}. Observations of the Horsehead Nebula reveal a steep density gradient in the PDRs \qt{{Habart 2005, Guzmán 2011, Hernández-Vera 2023}}. \qt{Hernández-Vera (2023)} showed that constant density models cannot reproduce observations, nor by previously proposed density profile prescriptions. Furthermore, recent observations from ALMA and Herschel indicate that the warm layer of PDRs is indeed isobaric, characterized by relatively high thermal pressures \qt{{Marconi 1998, Goicoechea 2016, Joblin 2018, Wu 2018, Bron 2018, Maillard 2021}}. For this reason, I use the constant pressure model in the \mdpdr{} for my study.
-
-As shown in Fig.~\ref{fig:cmp_cstp_cstn}, I compare the cloud structure computed with constant pressure and constant density assumptions, illustrating the differences in the resulting PDR structures. In the constant pressure, the unphysical 
+\end{table}
 
 \begin{figure}
     \centering
-    \includegraphics[width=.48\textwidth,keepaspectratio]{struct_nH3e5.pdf}
-    \includegraphics[width=.48\textwidth,keepaspectratio]{struct_P5e6.pdf}
-    \caption{Comparison of the cloud structure computed with constant density (left) and constant pressure (right), with a shared legend displayed in the left plot.} \label{fig:cmp_cstp_cstn}
+    \includegraphics[width=.6\textwidth,keepaspectratio]{slab_geometry.png}
+    \caption{Scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006}.} \label{fig:1Dgeometry}
 \end{figure}
 
-\subsubsection{Models with Radiative Transfer of \ce{H2}}
+\subsubsection{Constant Pressure vs. Constant Density} \label{sec:cstnp}
+
+The density structure of a PDR model, whether it assumes constant density, constant pressure, or a user-defined density profile, can significantly influence the simulation results \parencite{Wolfire2022}. As shown in Fig.~\ref{fig:cmp_cstp_cstn} and Fig.~\ref{fig:cmp_cstp_cstn_arcsec}, I compare the cloud structure computed with constant pressure and constant density assumptions, illustrating the differences in the resulting PDR structures. The values $n_H = \qty{3e5}{cm^{-3}}$ for the constant density model and $P = \qty{5e6}{K\,cm^{-3}}$ for the constant pressure model are based on \textcite{Maillard2023}. In the constant pressure model, the transition from atomic to molecular hydrogen occurs at higher visual extinction (Fig.~\ref{fig:cmp_cstp_cstn}), and the total physical thickness of the cloud is larger (Fig.~\ref{fig:cmp_cstp_cstn_arcsec}). The temperature profile in the constant pressure model is also more gradual. Additional comparisons between various constant density models and constant pressure models are provided \qt{in the appendix}.
+
+Observations of the Horsehead Nebula reveal a steep density gradient in the PDRs \parencite{Habart2005,Guzmán2011}. \textcite{HernándezVera2023} showed that constant density models fail to reproduce the observed structures, and neither do previously proposed density profile prescriptions. Furthermore, recent observations from ALMA and Herschel indicate that the warm layer of PDRs is indeed isobaric, with by relatively high thermal pressures \parencite{Marconi1998,Goicoechea2016,Joblin2018,Wu2018,Bron2018,Maillard2021}. Based on these findings, I adopt a constant pressure model with $P = \qty{5e6}{K\,cm^{-3}}$ for the subsequent analysis.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.49\textwidth,keepaspectratio]{struct_nH3e5.pdf}
+    \includegraphics[width=.49\textwidth,keepaspectratio]{struct_P5e6.pdf}
+    \caption{Comparison of the cloud structure computed with constant density $n_H = \qty{3e5}{cm^{-3}}$ (left) and constant pressure $P = \qty{5e6}{K\,cm^{-3}}$ (right), with a shared legend displayed in the left plot. All other parameters are the same as those listed in Table.~\ref{tab:params}.} \label{fig:cmp_cstp_cstn}
+\end{figure}
+
+\begin{figure}[hb]
+    \centering
+    \includegraphics[width=.49\textwidth,keepaspectratio]{struct_nH3e5_arcsec.pdf}
+    \includegraphics[width=.49\textwidth,keepaspectratio]{struct_P5e6_arcsec.pdf}
+    \caption{Similar to Fig.~\ref{fig:cmp_cstp_cstn}, but using physical units, with arcseconds as the distance unit and the densities represented by their actual values (not normalized by proton density).} \label{fig:cmp_cstp_cstn_arcsec}
+\end{figure}
+
+\subsubsection{Models with Exact Radiative Transfer of \ce{H2}} \label{sec:exactrt}
+
+There are two options available in the \mdpdr{} for treating radiative transfer in the UV. The first is the FGK approximation \parencite{Federman1979}, which accounts for the self-shielding of \ce{H} and \ce{H2} molecules. Self-shielding occurs when molecules absorb radiation in their own spectral lines, reducing the flux available to penetrate deeper into the cloud. However, the FGK approximation neglects mutual shielding, where the overlap and interaction of absorption lines between different species or multiple lines of the same species further attenuate the radiation field.
+
+The second, more accurate approach, is to compute the radiative transfer exactly \parencite{Goicoechea2007,Gonzalez2008}. This method explicitly includes mutual shielding for a limited number of energy levels of \ce{H} and \ce{H2}. For higher energy levels, the FGK approximation is still applied, as their contribution is expected to be negligible due to their low population. Although the exact method is computationally more intensive, it allows a more accurate treatment of the UV radiation field, which, in turn, affects the PDR structure. For instance, with the exact method, the increased attenuation of the radiation field shifts the \ce{H}/\ce{H2} transition layer to lower extinction depths \parencite{Goicoechea2007}.
+
+\qt{add a plot of the radiation field to show the effect of radiative shielding}
+
+\qt{figures comparing with and without h2 rt}
+
 \subsubsection{Models with Surface Chemistry}
+In the ISM, direct gas-phase formation of molecules is very inefficient. Instead, molecules are formed on the surfaces of dust grains, which act as catalysts by providing a surface for adsorbed atoms to meet and react. The grains also absorb the excess energy released by the formation process, preventing dissociation that would otherwise occur in the gas-phase formation. The formation of \ce{H2} is a key demonstration of the importance of this process, as the gas-phase formation rate of \ce{H2} is much lower than the rate required to explain the observed abundance of \ce{H2} in the ISM \parencite{Gould1963,Hollenbach1971}. In addition to chemical reactions, dust grains also play a role in the sublimation and freeze-out of molecules, leading to “jumps” or “drops” in molecular profiles at specific temperatures \parencite{Herbst2009}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.49\textwidth,keepaspectratio]{cmpsurfb_H_O.pdf}
+    \includegraphics[width=.49\textwidth,keepaspectratio]{cmpsurfb_CO_H2O.pdf}
+    \caption{Comparison of abundances for models computed with and without surface chemistry: \ce{H} species and \ce{O} (left), and \ce{C} species, \ce{CO}, and \ce{H2O} (right).} \label{fig:cmpsurfb}
+\end{figure}
+
+In Fig.~\ref{fig:cmpsurfb}, I compare the PDR models computed with and without surface chemistry. The inclusion of surface reactions leads to an earlier rise in the abundances of $n(\ce{H2})$, $n(\ce{CO})$ and $n(\ce{H2O})$ due to enhanced production on dust grain surfaces. At greater depths within the cloud, the abundances of almost all molecules decrease in the model with surface chemistry because of the freeze-out of molecules onto the dust grains. Grains also reduce the gas temperature, as they absorb the energy released during molecule formation, as shown in the left panel. Therefore, including surface chemistry in PDR models is crucial for accurately describing the molecular abundances and the gas temperature.
+
+To summarize the model comparisons in this section, we will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud surface in the following sections.
 
 \subsection{Geometry}
 % \begin{wrapfigure}{r}{.32\textwidth}
@@ -209,7 +290,7 @@ As shown in Fig.~\ref{fig:cmp_cstp_cstn}, I compare the cloud structure computed
     \raisebox{-0.5\height}{\includegraphics[width=.69\textwidth,keepaspectratio]{figures/slab_geometry.png}}
     \hfill
     \raisebox{-0.5\height}{\includegraphics[width=.24\textwidth,keepaspectratio]{figures/sphere_geometry_2LoS.pdf}}
-    \caption{Left: scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit_2006} Right: scheme of the plane-parallel geometry of the PDR wrapper.} \label{fig:geometry}
+    \caption{Left: scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006} Right: scheme of the plane-parallel geometry of the PDR wrapper.} \label{fig:geometry}
 \end{figure}
 
 In order to model the curvature of the cloud surface, we approximate the surface using plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}.
@@ -360,5 +441,8 @@ For example, if we consider the \ce{CO} transition from v = 0, J = 2 to v = 0, J
 
 \newpage
 \printbibliography
+
+\newpage
+\appendix
 
 \end{document}
