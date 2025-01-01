@@ -12,6 +12,7 @@
 \usepackage[dvipsnames]{xcolor}
 \usepackage{graphicx} 
 \graphicspath{ {./figures/}, {/Users/luducheng/Documents/templates/logos/OBSPM/LERMA/RGB - RVB/Noir/}} 
+\usepackage{wrapfig}
 
 \usepackage{tabularx, makecell, booktabs}
 \usepackage{caption}
@@ -36,7 +37,7 @@
 
 % citations
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
-\usepackage[backend=biber,citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,isbn=false,url=false,eprint=false,date=year,maxcitenames=2,giveninits=true,uniquelist=minyear,sorting=nyt]{biblatex}
+\usepackage[backend=biber,citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,isbn=false,url=false,eprint=false,date=year,maxcitenames=2,giveninits=true,uniquename=init,uniquelist=minyear,sorting=nyt]{biblatex}
 \DeclareNameAlias{default}{family-given}
 \DeclareNameAlias{sortname}{family-given}
 \addbibresource{./pdr_references.bib}
@@ -253,49 +254,58 @@ Observations of the Horsehead Nebula reveal a steep density gradient in the PDRs
     \caption{Similar to Fig.~\ref{fig:cmp_cstp_cstn}, but using physical units, with arcseconds as the distance unit and the densities represented by their actual values (not normalized by proton density).} \label{fig:cmp_cstp_cstn_arcsec}
 \end{figure}
 
-\subsubsection{Models with Exact Radiative Transfer of \ce{H2}} \label{sec:exactrt}
+\subsubsection{Models with Exact Radiative Transfer of \texorpdfstring{\ce{H2}}{H2}} \label{sec:exactrt}
 
-There are two options available in the \mdpdr{} for treating radiative transfer in the UV. The first is the FGK approximation \parencite{Federman1979}, which accounts for the self-shielding of \ce{H} and \ce{H2} molecules. Self-shielding occurs when molecules absorb radiation in their own spectral lines, reducing the flux available to penetrate deeper into the cloud. However, the FGK approximation neglects mutual shielding, where the overlap and interaction of absorption lines between different species or multiple lines of the same species further attenuate the radiation field.
+There are two options available in the \mdpdr{} for treating radiative transfer in the UV. The first is the FGK approximation \parencite{Federman1979}, in which the self-shielding of \ce{H} and \ce{H2} molecules is treated approximately. Self-shielding occurs when molecules absorb radiation in their own spectral lines, reducing the flux available to penetrate deeper into the cloud. However, the FGK approximation neglects mutual shielding, where the overlap and interaction of absorption lines between different species or multiple lines of the same species further attenuate the radiation field.
 
-The second, more accurate approach, is to compute the radiative transfer exactly \parencite{Goicoechea2007,Gonzalez2008}. This method explicitly includes mutual shielding for a limited number of energy levels of \ce{H} and \ce{H2}. For higher energy levels, the FGK approximation is still applied, as their contribution is expected to be negligible due to their low population. Although the exact method is computationally more intensive, it allows a more accurate treatment of the UV radiation field, which, in turn, affects the PDR structure. For instance, with the exact method, the increased attenuation of the radiation field shifts the \ce{H}/\ce{H2} transition layer to lower extinction depths \parencite{Goicoechea2007}.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=.92\textwidth,keepaspectratio]{spectra_fgkh2_1.pdf}
+    % \includegraphics[width=.88\textwidth,keepaspectratio]{spectra_fgkh2_2.pdf}
+    \caption{Comparison of the local energy density of the radiation field from $1074~\text{\AA}$ to $1080~\text{\AA}$ at visual extinction depths $A_V = 0.3$ (blue), $A_V = 2$ (orange), and $A_V = 5$ (green), for models computed using the FGK approximation (dashed lines) and the exact radiative transfer method (solid lines) including the 20 lowest \ce{H2} absorption lines.} \label{fig:cmpH2rtspectra}
+\end{figure}
 
-\qt{add a plot of the radiation field to show the effect of radiative shielding}
+The second, more accurate approach is to solve the radiative transfer exactly. This method explicitly includes mutual shielding for a given number of energy levels of \ce{H}, \ce{H2}, \ce{D}, \ce{HD}, \ce{CO}, \ce{^{13}CO}, and \ce{C^{18}O}, as detailed in \textcite{Goicoechea2007,Gonzalez2008}. For higher energy levels, the FGK approximation is retained, as their contributions are negligible due to their low populations.
 
-\qt{figures comparing with and without h2 rt}
+Fig.\ref{fig:cmpH2rtspectra} compares spectra from $1074~\text{\AA}$ to $1080~\text{\AA}$ at various visual extinction values for models computed using the FGK approximation and the exact radiative transfer method, demonstrating pronounced attenuation when applying the exact method of \ce{H2} radiative transfer. Although computationally more intensive, the exact method enables a more accurate treatment of the UV radiation field, which subsequently influences the PDR structure. For instance, the exact method leads to increased attenuation of the radiation field, shifting the \ce{H}/\ce{H2} transition layer to lower extinction depths \parencite{Goicoechea2007}, as illustrated in Fig.\ref{fig:cmpH2rt}. Furthermore, the enhanced attenuation from mutual shielding results in a lower temperature profile. To balance accuracy and computational efficiency, my model applies exact radiative transfer only to the 20 lowest energy levels of \ce{H2}, which are the primary contributors to the attenuation. \qt{how to explain the second bump occuring in the both cases?}
+
+\begin{figure}[hb]
+    \centering
+    \includegraphics[width=.51\textwidth,keepaspectratio]{cmpH2rt_H_O.pdf}
+    \includegraphics[width=.48\textwidth,keepaspectratio]{cmpH2rt_CO_H2O.pdf}
+    \caption{Comparison of temperature profile and abundances for models computed with (solid) and without (dashed) exact radiative transfer (RT) of \ce{H2}: \ce{H} species and \ce{O} (left), and \ce{C} species, \ce{CO}, and \ce{H2O} (right). } \label{fig:cmpH2rt}
+\end{figure}
 
 \subsubsection{Models with Surface Chemistry}
 In the ISM, direct gas-phase formation of molecules is very inefficient. Instead, molecules are formed on the surfaces of dust grains, which act as catalysts by providing a surface for adsorbed atoms to meet and react. The grains also absorb the excess energy released by the formation process, preventing dissociation that would otherwise occur in the gas-phase formation. The formation of \ce{H2} is a key demonstration of the importance of this process, as the gas-phase formation rate of \ce{H2} is much lower than the rate required to explain the observed abundance of \ce{H2} in the ISM \parencite{Gould1963,Hollenbach1971}. In addition to chemical reactions, dust grains also play a role in the sublimation and freeze-out of molecules, leading to “jumps” or “drops” in molecular profiles at specific temperatures \parencite{Herbst2009}.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.49\textwidth,keepaspectratio]{cmpsurfb_H_O.pdf}
-    \includegraphics[width=.49\textwidth,keepaspectratio]{cmpsurfb_CO_H2O.pdf}
-    \caption{Comparison of abundances for models computed with and without surface chemistry: \ce{H} species and \ce{O} (left), and \ce{C} species, \ce{CO}, and \ce{H2O} (right).} \label{fig:cmpsurfb}
+    \includegraphics[width=.52\textwidth,keepaspectratio]{cmpsurfb_H_O.pdf}
+    \includegraphics[width=.47\textwidth,keepaspectratio]{cmpsurfb_CO_H2O.pdf}
+    \caption{Comparison of temperature profile and abundances for models computed with (soid lines) and without (dashed lines) surface chemistry: \ce{H} species and \ce{O} (left), and \ce{C} species, \ce{CO}, and \ce{H2O} (right).} \label{fig:cmpsurfb}
 \end{figure}
 
 In Fig.~\ref{fig:cmpsurfb}, I compare the PDR models computed with and without surface chemistry. The inclusion of surface reactions leads to an earlier rise in the abundances of $n(\ce{H2})$, $n(\ce{CO})$ and $n(\ce{H2O})$ due to enhanced production on dust grain surfaces. At greater depths within the cloud, the abundances of almost all molecules decrease in the model with surface chemistry because of the freeze-out of molecules onto the dust grains. Grains also reduce the gas temperature, as they absorb the energy released during molecule formation, as shown in the left panel. Therefore, including surface chemistry in PDR models is crucial for accurately describing the molecular abundances and the gas temperature.
 
 To summarize the model comparisons in this section, we will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud surface in the following sections.
 
-\subsection{Geometry}
-% \begin{wrapfigure}{r}{.32\textwidth}
-%     \begin{center}
-%         \includegraphics[width=.28\textwidth]{sphere_geometry_2LoS.pdf}
-%     \end{center}
-%     \caption{\qt{add a figure of the slab setup of the MeudonPDR code}Scheme of the plane-parallel geometry. Curvature exaggerated for clarity.} \label{fig:geometry}
-% \end{wrapfigure}
-
-\begin{figure}
+\subsection{Column Density in a Spherical Geometry}
+\begin{wrapfigure}{r}{.32\textwidth}
     \centering
-    \raisebox{-0.5\height}{\includegraphics[width=.69\textwidth,keepaspectratio]{figures/slab_geometry.png}}
-    \hfill
-    \raisebox{-0.5\height}{\includegraphics[width=.24\textwidth,keepaspectratio]{figures/sphere_geometry_2LoS.pdf}}
-    \caption{Left: scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006} Right: scheme of the plane-parallel geometry of the PDR wrapper.} \label{fig:geometry}
-\end{figure}
+    \includegraphics[width=.25\textwidth]{sphere_geometry_2LoS.pdf}
+    \caption{Scheme of the spherical, plane-parallel geometry. Curvature exaggerated for clarity.} \label{fig:geometry}
+\end{wrapfigure}
 
-In order to model the curvature of the cloud surface, we approximate the surface using plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}.
+% \begin{figure}
+%     \centering
+%     \raisebox{-0.5\height}{\includegraphics[width=.69\textwidth,keepaspectratio]{figures/slab_geometry.png}}
+%     \hfill
+%     \raisebox{-0.5\height}{\includegraphics[width=.24\textwidth,keepaspectratio]{figures/sphere_geometry_2LoS.pdf}}
+%     \caption{Left: scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006} Right: scheme of the plane-parallel geometry of the PDR wrapper.} \label{fig:geometry}
+% \end{figure}
 
-More precisely, we consider the PDR region as the outermost shell embedded in a fictitious spherical cloud, whose radius $R$ will need to be determined by the user and is given as a parameter to the wrapper code.
+In order to model the curvature of the cloud surface, we approximate the surface using plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}. More precisely, we consider the PDR region as the outermost shell embedded in a fictitious spherical cloud, whose radius $R$ will need to be determined by the user and is given as a parameter to the wrapper code.
 
 A line of sight will be defined by an impact parameter $b$, which is the distance from the line-of-sight (LoS) to the center of the cloud. 
 
@@ -305,8 +315,6 @@ Using Pythagorean theorem, we can easily establish that
 \begin{equation}
     d = R - \sqrt{s^2 + b^2} 
 \end{equation}
-
-\subsection{Column Density}
 
 The wrapper code take as input:
 \begin{itemize}
