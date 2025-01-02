@@ -134,7 +134,7 @@ The interstellar medium (ISM) is composed of gas and dust between stars in galax
 Models have long been developed to help us interpret these
 
 
-The 1D slab geometry may not be approprioate in some cases, and the curvature of the cloud surface needs to be taken into account in order to reproduce the line profiles. A common technique is to use a time-dependent hydrodynamic simulation to obtain the density and velocity fields and then to postprocess it with a PDR code to obtain the steady-state chemical abundances and thermal equilibrium gas temperature (e.g., Levrier et al. 2012).
+The 1D slab geometry may not be approprioate in some cases, and the curvature of the PDR region needs to be taken into account in order to reproduce the line profiles. A common technique is to use a time-dependent hydrodynamic simulation to obtain the density and velocity fields and then to postprocess it with a PDR code to obtain the steady-state chemical abundances and thermal equilibrium gas temperature (e.g., Levrier et al. 2012).
 
 \subsection{Photodissociation Regions (PDRs)}
 Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemistry or heating processes\parencite{Tielens1985}. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
@@ -151,10 +151,16 @@ Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6
     \caption{\href{https://hubblesite.org/contents/media/images/2013/12/3166-Image.html?keyword=Horsehead}{Horsehead Nebula captured by the Hubble Space Telescope (HST) in 2013.} The image was created from Hubble data from proposal \href{http://archive.stsci.edu/proposal_search.php?mission=hst&id=12812}{12812}. Illustration Credit: \href{http://www.nasa.gov/}{NASA}, \href{http://www.spacetelescope.org/}{ESA}, and Z. Levay (\href{http://www.stsci.edu/}{STScI})} 
 \end{figure}
 
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth,keepaspectratio]{horsehead_zoomed.pdf}
+%     \caption{\href{https://www.esa.int/ESA_Multimedia/Images/2024/04/Webb_captures_iconic_Horsehead_Nebula_in_unprecedented_detail}{Three views of the Horsehead Nebula}. The first image (left) features the Horsehead Nebula as seen by ESA's Euclid telescope. The second image (middle) shows the NASA/ESA Hubble Space Telescope's infrared view of the Horsehead Nebula. The third image (right) features a new view of the Horsehead Nebula from the NASA/ESA/CSA James Webb Space Telescope's NIRCam (Near-InfraRed Camera) instrument.}
+% \end{figure}
+
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{horsehead_zoomed.pdf}
-    \caption{\href{https://www.esa.int/ESA_Multimedia/Images/2024/04/Webb_captures_iconic_Horsehead_Nebula_in_unprecedented_detail}{Three views of the Horsehead Nebula}. The first image (left) features the Horsehead Nebula as seen by ESA's Euclid telescope. The second image (middle) shows the NASA/ESA Hubble Space Telescope's infrared view of the Horsehead Nebula. The third image (right) features a new view of the Horsehead Nebula from the NASA/ESA/CSA James Webb Space Telescope's NIRCam (Near-InfraRed Camera) instrument.}
+    \includegraphics[width=\textwidth,keepaspectratio]{horsehead_HernandezVera2023.pdf}
+    \caption{Multiphase view of the Horsehead nebula (Barnard 33). Reprinted from \textcite{HernándezVera2023}. Left: Composite color image of the Horsehead nebula observed with the VLT (ESO). Right: Zoomed-in view of the edge of the molecular cloud, imaged with ALMA in the \ce{CO} $J = 3-2$ line emission (blue) and the \qty{0.9}{m} KPNO telescope in the H$\alpha$ line emission. The dark region represents the neutral atomic layer.} \label{fig:obsimg}
 \end{figure}
 
 In order to compare with observations, we need to convert the distance unit \unit{cm} used the in \mdpdr{} into the \unit{arcsec} unit used in observation,
@@ -204,7 +210,7 @@ The observational data used in this study (Fig.~\ref{fig:observation}) were obta
 % caveats? PDR annual review section 5.5
 A significant heterogeneity exists among the available PDR models, which differ in their geometry, physical and chemical structures, and model parameters. \textcite{Röllig2007} suggest that the choice of a spedific code should depend on the physical and chemical processes implemented in the code, as well as the characteristics of the emission source. 
 
-In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonzalez2008,LeBourlot2012,Bron_thesis,Bron2014,Bron2016} to simulate the Horsehead Nebula. The \mdpdr{} models a stationary one-dimensional (1D), plane-parallel slab of gas and dust illuminated by an ultraviolet (UV) radiation field from one or both sides (Fig.~\ref{fig:1Dgeometry}). At each iteration, the code solves the UV radiative transfer in both the continuum and lines, followed by the chemical balance, and finally the level populations and thermal balance. The code outputs the level populations, the gas temperature, and the chemical abundances as a function of the depth into the cloud, with optional output of the radiation field. The physical parameters used to model the Horsehead PDR are summarized in Table~\ref{tab:params}.
+In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonzalez2008,LeBourlot2012,Bron_thesis,Bron2014,Bron2016} to simulate the Horsehead Nebula. The \mdpdr{} models a stationary one-dimensional (1D) slab of gas and dust illuminated by an ultraviolet (UV) radiation field from one or both sides (Fig.~\ref{fig:1Dgeometry}). At each iteration, the code solves the UV radiative transfer in both the continuum and lines, followed by the chemical balance, and finally the level populations and thermal balance. The code outputs the level populations, the gas temperature, and the chemical abundances as a function of the depth into the cloud, with optional output of the radiation field. The physical parameters used to model the Horsehead PDR are summarized in Table~\ref{tab:params}.
 
 \begin{table}[h!]
     \centering
@@ -269,7 +275,7 @@ The second, more accurate approach is to solve the radiative transfer exactly. T
 
 Fig.\ref{fig:cmpH2rtspectra} compares spectra from $1074~\text{\AA}$ to $1080~\text{\AA}$ at various visual extinction values for models computed using the FGK approximation and the exact radiative transfer method, demonstrating pronounced attenuation when applying the exact method of \ce{H2} radiative transfer. Although computationally more intensive, the exact method enables a more accurate treatment of the UV radiation field, which subsequently influences the PDR structure. For instance, the exact method leads to increased attenuation of the radiation field, shifting the \ce{H}/\ce{H2} transition layer to lower extinction depths \parencite{Goicoechea2007}, as illustrated in Fig.\ref{fig:cmpH2rt}. Furthermore, the enhanced attenuation from mutual shielding results in a lower temperature profile. To balance accuracy and computational efficiency, my model applies exact radiative transfer only to the 20 lowest energy levels of \ce{H2}, which are the primary contributors to the attenuation. \qt{how to explain the second bump occuring in the both cases?}
 
-\begin{figure}[hb]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.51\textwidth,keepaspectratio]{cmpH2rt_H_O.pdf}
     \includegraphics[width=.48\textwidth,keepaspectratio]{cmpH2rt_CO_H2O.pdf}
@@ -279,7 +285,7 @@ Fig.\ref{fig:cmpH2rtspectra} compares spectra from $1074~\text{\AA}$ to $1080~\t
 \subsubsection{Models with Surface Chemistry}
 In the ISM, direct gas-phase formation of molecules is very inefficient. Instead, molecules are formed on the surfaces of dust grains, which act as catalysts by providing a surface for adsorbed atoms to meet and react. The grains also absorb the excess energy released by the formation process, preventing dissociation that would otherwise occur in the gas-phase formation. The formation of \ce{H2} is a key demonstration of the importance of this process, as the gas-phase formation rate of \ce{H2} is much lower than the rate required to explain the observed abundance of \ce{H2} in the ISM \parencite{Gould1963,Hollenbach1971}. In addition to chemical reactions, dust grains also play a role in the sublimation and freeze-out of molecules, leading to “jumps” or “drops” in molecular profiles at specific temperatures \parencite{Herbst2009}.
 
-\begin{figure}[h]
+\begin{figure}[hb]
     \centering
     \includegraphics[width=.52\textwidth,keepaspectratio]{cmpsurfb_H_O.pdf}
     \includegraphics[width=.47\textwidth,keepaspectratio]{cmpsurfb_CO_H2O.pdf}
@@ -288,7 +294,7 @@ In the ISM, direct gas-phase formation of molecules is very inefficient. Instead
 
 In Fig.~\ref{fig:cmpsurfb}, I compare the PDR models computed with and without surface chemistry. The inclusion of surface reactions leads to an earlier rise in the abundances of $n(\ce{H2})$, $n(\ce{CO})$ and $n(\ce{H2O})$ due to enhanced production on dust grain surfaces. At greater depths within the cloud, the abundances of almost all molecules decrease in the model with surface chemistry because of the freeze-out of molecules onto the dust grains. Grains also reduce the gas temperature, as they absorb the energy released during molecule formation, as shown in the left panel. Therefore, including surface chemistry in PDR models is crucial for accurately describing the molecular abundances and the gas temperature.
 
-To summarize the model comparisons in this section, we will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud surface in the following sections.
+To summarize the model comparisons in this section, we will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud's surface in the following sections.
 
 \subsection{Column Density in a Spherical Geometry}
 \begin{wrapfigure}{r}{.32\textwidth}
@@ -305,44 +311,30 @@ To summarize the model comparisons in this section, we will use the constant pre
 %     \caption{Left: scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006} Right: scheme of the plane-parallel geometry of the PDR wrapper.} \label{fig:geometry}
 % \end{figure}
 
-In order to model the curvature of the cloud surface, we approximate the surface using plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}. More precisely, we consider the PDR region as the outermost shell embedded in a fictitious spherical cloud, whose radius $R$ will need to be determined by the user and is given as a parameter to the wrapper code.
+To model the curvature of the cloud, we treat the PDR region as the outermost shell of a fictitious spherical cloud, assuming plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}. This approximation is valid when the curvature radius of the cloud's surface is relatively small compared to the radius of the cloud. For the models in this study, the physical depth of the PDR region is approximately $\qty{0.08}{pc}$, which is significantly smaller than the curvature radius, as seen in Fig.~\ref{fig:obsimg}, thereby justifying the use of plane-parallel geometry. Under this assumption, we consider all physical variables at a given distance from the cloud's surface to be equal to those computed by the \mdpdr{} model at the same distance from the cloud's edge.
 
-A line of sight will be defined by an impact parameter $b$, which is the distance from the line-of-sight (LoS) to the center of the cloud. 
+The radius $R$ of the fictitious spherical cloud is provided as an input parameter to the wrapper code. A line of sight (LoS) is defined by its impact parameter $b$, which measures the perpendicular distance from the LoS to the center of the cloud. From the output of the \mdpdr{}, the level number densities $n_X(d)$ are obtained as a function of the depth $d$ into the cloud. In plane-parallel geometry, $n_X(d)$ gives the number density at a point located at a depth $d$ from the spherical surface. 
 
-From the output of the \mdpdr{}, we have the number densities of levels as a function of the depth into the cloud, so we need to know the depth (i.e., the distance to the cloud surface) corresponding to each point along the LoS, we denote this quantity as $d$.
-
-Using Pythagorean theorem, we can easily establish that
+The column density along a given LoS is determined by interpolating the number density at each depth d and then integrating along the LoS. To do this, we first compute the range of distances inside the PDR region along the LoS. The maximum half-distance $s_{\max}$ is given by:
 \begin{equation}
-    d = R - \sqrt{s^2 + b^2} 
+    s_{\max} = \sqrt{R^2 - b^2},
 \end{equation}
-
-The wrapper code take as input:
-\begin{itemize}
-    \item the level number densities computed by the MeudonPDR code, as a function of the depth into the cloud, $n_X(d)$;
-    \item the radius of the fictitious spherical cloud, $R$;
-    \item the impact parameter of the LoS, $b$.
-\end{itemize}
-The algorithm goes as follow
-\begin{enumerate}
-    \item interpolate the level number density to enable the computation of the density at any valid given value of depth, $n_X(d) = f(d)$;
-    \item compute the range of distances inside the PDR region along the LoS
-    \begin{equation}
-         s_{\max} = \sqrt{R^2 - b^2}, 
-         s_{\min} = \left\{\begin{array}{ll}
-            0  &  b > R - d_\mr{PDR} \\
-            \sqrt{(R - d_\mr{PDR})^2 - b^2}  &  b < R - d_\mr{PDR}
-         \end{array}\right.
-         % \mr{maximum\ distance} = 2 s_{\max},
-    \end{equation}
-    \item convert the distance along the LoS to depth from the surface of the cloud, and compute the level number density
-    \begin{equation}
-        n_X(s) = f(R - \sqrt{s^2 + b^2});
-    \end{equation}
-    \item the column density for a given LoS with impact parameter $b$ is given by
-    \begin{equation}
-        N_X(b) = 2\int_{s_{\min}}^{s_{\max}} n_X(s') \dd{s'}.
-    \end{equation}
-\end{enumerate}
+while the computation of the minimum half-distance $s_{\min}$ depends on whether the LoS penetrates beyond the PDR region (see Fig.~\ref{fig:geometry}):
+\begin{equation}
+    s_{\min} = \left\{\begin{array}{ll}
+       0  &  \text{ if } b > R - d_\mr{PDR}, \text{ LoS 1} \\
+       \sqrt{(R - d_\mr{PDR})^2 - b^2}  &  \text{ if } b < R - d_\mr{PDR}, \text{ LoS 2}
+    \end{array}\right.,
+\end{equation}
+where $d_\mr{PDR}$ is the depth of the PDR region. Next, the distance $s$ along the LoS is converted into the depth $d$ from the cloud's surface. Using Pythagorean theorem, we can easily establish that $d = R - \sqrt{s^2 + b^2}$. The number density at each point along the LoS is then calculated as:
+\begin{equation}
+    n_X(s) = f(R - \sqrt{s^2 + b^2}),
+\end{equation}
+where $f(d)$ is the interpolated function of the level number density $n_X(d)$. Finally, the column density $N_X(b)$ for a given LoS with impact parameter $b$ is obtained by integrating the number density along the LoS. By symmetry, the total column density is twice the integral over the half-LoS: 
+\begin{equation}
+    N_X(b) = 2\int_{s_{\min}}^{s_{\max}} n_X(s') \dd{s'}.
+\end{equation}
+By considering the curvature of the cloud's surface, this column density allows for a more direct comparison with observations. However, this approach does not account for the absorption and emission processes occurring inside the cloud. For lines that are optically thick, the radiative transfer equation must be solved along the LoS to accurately reproduce the observed line profiles. This more detailed treatment will be addressed in the next section.
 
 \subsection{Radiative transfer equation}
 In the previous calculation of the column densities, we have made the assumption that all lines are optically thin; in fact, some of the lines can be optically thick, which explains the difference in the shape of the curve in observations for different lines in Fig~\ref{fig:observation}.
