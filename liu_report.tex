@@ -16,7 +16,6 @@
 
 \usepackage{tabularx, makecell, booktabs}
 \usepackage{caption}
-\usepackage{subcaption}
 \usepackage{enumitem}
 \usepackage[normalem]{ulem}
 
@@ -42,6 +41,7 @@
 \DeclareNameAlias{sortname}{family-given}
 \addbibresource{./pdr_references.bib}
 \input{/Users/luducheng/Documents/templates/asstex} % to compile on my computer
+\renewcommand*{\thefootnote}{(\arabic{footnote})}
 % \input{asstex}
 
 %%%%% define your own command %%%%%
@@ -217,7 +217,7 @@ In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonza
     \begin{tabular}{ll}
         \midrule
         \midrule
-        Cloud size ($A_V$\footnotemark[1]) & 40 \\
+        Cloud size ($A_{V, \max}$\footnotemark[1]) & 40 \\
         Proton density\footnotemark[2] ($n_H$) & \qtyrange[range-units=single,range-phrase=~--~]{3e4}{3e6}{cm^{-3}}\\
         Pressure\footnotemark[2] ($P$) & \qtyrange[range-units=single,range-phrase=~--~]{1e6}{1e7}{K\,cm^{-3}} \\
         ISRF & shape: Mathis\footnotemark[3], geometry: beam\_isot\footnotemark[4] \\
@@ -230,14 +230,15 @@ In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonza
         $C_D = N_H / E(B-V)$ & $1.57\times 10^{22}$\\
         \bottomrule
     \end{tabular}
-    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, $A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})$.  \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models(see Section~\ref{sec:cstnp}). \textsuperscript{3}\textcite{Mathis1983}. \textsuperscript{4}Perpendicular on observer side, isotropic on back side. \textsuperscript{5}In Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6} See Section.~\ref{sec:exactrt}. \textsuperscript{7}Only used in Doppler line broadening. \textsuperscript{8}\textcite{Fitzpatrick1990}. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mdpdr{} documentation}.} \label{tab:params}
-
+    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, $A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})$.  \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models(see Section~\ref{sec:cstnp}). \textsuperscript{3}\textcite{Mathis1983}. \textsuperscript{4}Perpendicular on observer side, isotropic on back side. \textsuperscript{5}In Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6} See Section.~\ref{sec:exactrt}. \textsuperscript{7}Only used in Doppler line broadening. \textsuperscript{8}\textcite{Fitzpatrick1990}. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mintinline{latex}{MeudonPDR}} documentation.} \label{tab:params}
 \end{table}
 
 \begin{figure}
     \centering
-    \includegraphics[width=.6\textwidth,keepaspectratio]{slab_geometry.png}
-    \caption{Scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006}.} \label{fig:1Dgeometry}
+    % \includegraphics[width=.6\textwidth,keepaspectratio]{slab_geometry.png}
+    % \caption{Scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006}.} \label{fig:1Dgeometry}
+    \includegraphics[width=.7\textwidth,keepaspectratio]{schemePDR.pdf}
+    \caption{Scheme of the slab geometry in \mdpdr{}. $A_V = 0$ at the observer side and increases toward the back side, reaching $A_V = A_{V, \max}$, which controls the size of the cloud. Reprinted from Fig.~3.1 in \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mintinline{latex}{MeudonPDR}} documentation.} \label{fig:1Dgeometry}
 \end{figure}
 
 \subsubsection{Constant Pressure vs. Constant Density} \label{sec:cstnp}
@@ -294,7 +295,7 @@ In the ISM, direct gas-phase formation of molecules is very inefficient. Instead
 
 In Fig.~\ref{fig:cmpsurfb}, I compare the PDR models computed with and without surface chemistry. The inclusion of surface reactions leads to an earlier rise in the abundances of $n(\ce{H2})$, $n(\ce{CO})$ and $n(\ce{H2O})$ due to enhanced production on dust grain surfaces. At greater depths within the cloud, the abundances of almost all molecules decrease in the model with surface chemistry because of the freeze-out of molecules onto the dust grains. Grains also reduce the gas temperature, as they absorb the energy released during molecule formation, as shown in the left panel. Therefore, including surface chemistry in PDR models is crucial for accurately describing the molecular abundances and the gas temperature.
 
-To summarize the model comparisons in this section, we will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud's surface in the following sections.
+To summarize the model comparisons in this section, I will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud's surface in the following sections.
 
 \subsection{Column Density in a Spherical Geometry}
 \begin{wrapfigure}{r}{.32\textwidth}
@@ -311,11 +312,11 @@ To summarize the model comparisons in this section, we will use the constant pre
 %     \caption{Left: scheme of the slab geometry of the \mdpdr{}. Reprinted from \textcite{LePetit2006} Right: scheme of the plane-parallel geometry of the PDR wrapper.} \label{fig:geometry}
 % \end{figure}
 
-To model the curvature of the cloud, we treat the PDR region as the outermost shell of a fictitious spherical cloud, assuming plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}. This approximation is valid when the curvature radius of the cloud's surface is relatively small compared to the radius of the cloud. For the models in this study, the physical depth of the PDR region is approximately $\qty{0.08}{pc}$, which is significantly smaller than the curvature radius, as seen in Fig.~\ref{fig:obsimg}, thereby justifying the use of plane-parallel geometry. Under this assumption, we consider all physical variables at a given distance from the cloud's surface to be equal to those computed by the \mdpdr{} model at the same distance from the cloud's edge.
+To model the curvature of the cloud, I treat the PDR region as the outermost shell of a fictitious spherical cloud, assuming plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}. This approximation is valid when the curvature radius of the cloud's surface is relatively small compared to the radius of the cloud. For the models in this study, the physical depth of the PDR region is approximately $\qty{0.08}{pc}$, which is significantly smaller than the curvature radius, as seen in Fig.~\ref{fig:obsimg}, thereby justifying the use of plane-parallel geometry. Under this assumption, I consider all physical variables at a given distance from the cloud's surface to be equal to those computed by the \mdpdr{} model at the same distance from the cloud's edge.
 
 The radius $R$ of the fictitious spherical cloud is provided as an input parameter to the wrapper code. A line of sight (LoS) is defined by its impact parameter $b$, which measures the perpendicular distance from the LoS to the center of the cloud. From the output of the \mdpdr{}, the level number densities $n_X(d)$ are obtained as a function of the depth $d$ into the cloud. In plane-parallel geometry, $n_X(d)$ gives the number density at a point located at a depth $d$ from the spherical surface. 
 
-The column density along a given LoS is determined by interpolating the number density at each depth d and then integrating along the LoS. To do this, we first compute the range of distances inside the PDR region along the LoS. The maximum half-distance $s_{\max}$ is given by:
+The column density along a given LoS is determined by interpolating the number density at each depth d and then integrating along the LoS. To do this, I first compute the range of distances inside the PDR region along the LoS. The maximum half-distance $s_{\max}$ is given by:
 \begin{equation}
     s_{\max} = \sqrt{R^2 - b^2},
 \end{equation}
@@ -326,7 +327,7 @@ while the computation of the minimum half-distance $s_{\min}$ depends on whether
        \sqrt{(R - d_\mr{PDR})^2 - b^2}  &  \text{ if } b < R - d_\mr{PDR}, \text{ LoS 2}
     \end{array}\right.,
 \end{equation}
-where $d_\mr{PDR}$ is the depth of the PDR region. Next, the distance $s$ along the LoS is converted into the depth $d$ from the cloud's surface. Using Pythagorean theorem, we can easily establish that $d = R - \sqrt{s^2 + b^2}$. The number density at each point along the LoS is then calculated as:
+where $d_\mr{PDR}$ is the depth of the PDR region. Next, the distance $s$ along the LoS is converted into the depth $d$ from the cloud's surface. Using Pythagorean theorem, one can easily establish that $d = R - \sqrt{s^2 + b^2}$. The number density at each point along the LoS is then calculated as:
 \begin{equation}
     n_X(s) = f(R - \sqrt{s^2 + b^2}),
 \end{equation}
@@ -337,99 +338,42 @@ where $f(d)$ is the interpolated function of the level number density $n_X(d)$. 
 By considering the curvature of the cloud's surface, this column density allows for a more direct comparison with observations. However, this approach does not account for the absorption and emission processes occurring inside the cloud. For lines that are optically thick, the radiative transfer equation must be solved along the LoS to accurately reproduce the observed line profiles. This more detailed treatment will be addressed in the next section.
 
 \subsection{Radiative transfer equation}
-In the previous calculation of the column densities, we have made the assumption that all lines are optically thin; in fact, some of the lines can be optically thick, which explains the difference in the shape of the curve in observations for different lines in Fig~\ref{fig:observation}.
-
-To account for line extinction inside the cloud, we need to solve the radiative transfer equation along the LoS \qt{cite see, for example, Eq (1.67) Rybicki?}:
+In the previous calculation of the column densities, I assumed that all lines were optically thin. However, some lines can be optically thick, leading to differences in the observed line profiles for various lines, as seen in Fig~\ref{fig:observation}. To account for line extinction within the cloud, I need to solve the radiative transfer equation along the LoS \parencite[see, e.g.,][ Eq.~1.67]{Rybicki1979}:
 \begin{equation}
     \fird[I_\nu]{s} = A_{ul} n_u\frac{h\nu}{4\pi}\phi(\nu) +  B_{ul} n_u\frac{h\nu}{4\pi}I_\nu \phi(\nu) -  B_{lu} n_l\frac{h\nu}{4\pi}I_\nu \phi(\nu), \label{eq:rte}
 \end{equation}  
-% or, in wavelength,
-% \begin{equation}
-%     \fird[I_\lambda]{s} = A_{ul} n_u\frac{h\nu}{4\pi}\phi(\lambda) +  B_{ul} n_u\frac{h\nu}{4\pi}I_\lambda \phi(\lambda) -  B_{lu} n_l\frac{h\nu}{4\pi}I_\lambda \phi(\lambda),
-% \end{equation}
-where $n_u$ and $n_l$ are the number densities of the upper and lower levels of the transition, respectively, $h$ is the Planck's constant, $\nu$ is the frequency of the transition, and $\phi(\nu)$ is the line profile. We assume that the emission and absorption profiles are the same and we neglect scattering \qt{justify?}. $A_{ul}, B_{ul}, B_{lu}$ are the Einstein coefficients for this transition, which are related by the Einstein relation \qt{references}
+where $n_u$ and $n_l$ are the number densities of the upper and lower levels of the transition, respectively, $h$ is the Planck's constant, $\nu$ is the frequency of the transition, and $\phi(\nu)$ is the line profile. For simplicity, I use the same line profile for both emission and absorption, neglecting scattering. \qt{justify?}
+
+The coefficients $A_{ul}, B_{ul}, B_{lu}$ in Eq.~\ref{eq:rte} are the Einstein coefficients for spontaneous emission, stimulated emission, and absorption, respectively. These coefficients are intrinsic properties of the specific transition and are related through the Einstein relations \parencite{Einstein1917}:
 \begin{equation}
     B_{ul} = \frac{c^2}{2 h \nu_{ul}^3} A_{ul},\, g_l B_{lu} = g_u B_{ul},
 \end{equation}
-where $g_u$ and $g_l$ are the degeneracies of the upper and lower levels, respectively.
+where $g_u$ and $g_l$ are the degeneracies of the upper and lower levels.
 
-For consistency, we keep the same values for the Einstein coefficients as in the \mdpdr{}, which are taken from \qt{references?}.
-
-In the PDR, turbulences are the dominant line broadening process \qt{references?  a bit more on line broadening in the intro?}, in which case the line profile $\phi(\nu)$ is a Gaussian profile in the form \qt{references}
+In PDRs, the motion of atoms and molecules results in line broadening. Thermal motion produces a Gaussian profile, while turbulent motions contribute an additional broadening component. These effects are combined in the effective Doppler width, $\Delta \nu_D$, which is then included in the Gaussian line profile \parencite[see, e.g.,][Eqs.~10.68-10.72]{Rybicki1979}:
 \begin{equation}
-    \phi(\nu) = \frac{1}{\sigma_\nu \sqrt{2 \pi}}\exp\left({-\frac{(\nu - \nu_0)^2}{2 \sigma_\nu^2}}\right),
+    \phi(\nu) = \frac{1}{\sigma_\nu \sqrt{2 \pi}}\exp\left(-\frac{(\nu - \nu_0)^2}{2 \sigma_\nu^2}\right),
 \end{equation}
 where
 \begin{equation}
-    \sigma_\nu = \frac{\sqrt{2}}{2}\Delta \nu_D,\,\Delta \nu_D = \frac{\nu_0}{c}\sqrt{\frac{2 k T}{m} + v_\mr{turb}^2}.
+    \sigma_\nu = \frac{\sqrt{2}}{2}\Delta \nu_D, \quad \Delta \nu_D = \frac{\nu_0}{c}\sqrt{\frac{2 k T}{m} + v_\mr{turb}^2}.
 \end{equation}
-% Or, equivalently, in wavelength
-% \begin{equation}
-%     \phi(\lambda) = \frac{1}{\sigma_\lambda \sqrt{2 \pi}}\exp\left({-\frac{(\lambda - \lambda_0)^2}{2 \sigma_\lambda^2}}\right),
-% \end{equation}
-% where
-% \begin{equation}
-%     \sigma_\lambda = \frac{\sqrt{2}}{2}\Delta \lambda_D,\,\Delta \lambda_D = \frac{\lambda_0}{c}\sqrt{\frac{2 k T}{m} + v_\mr{turb}^2}.
-% \end{equation}
-The turbulent velocity $v_\mr{turb}$ is a parameter in the \mdpdr{}, with a default value of \qty{2}{\km\per\second}. $T$ is the temperature, and $m$ is the mass of the line-emitting species. For the mass we use the same value as the \mdpdr{} (as defined in , taken from \href{https://www.sisweb.com/referenc/source/exactmas.htm}{\qt{Scientific Instrument Services (SIS) database? change name?}}
+Here, $\nu_0$ is the central frequency of the transition, $c$ is the speed of light, $T$ is the gas temperature, $m$ is the mass of the emitting species, and $v_\mr{turb} = \qty{2}{\km\per\second}$ is the turbulent velocity, as introduced in Table.~\ref{tab:params}.
 
-The line profile is normalized so that $\int_0^{\infty} \phi(\nu) \dd{\nu} = 1$. In practice, we truncate the line profile at $5\sigma$ \qt{add a figure to demonstrate that this is reasonable for the lines concerned?}, i.e., the normalization becomes
+The line profile is normalized so that $\int_0^{\infty} \phi(\nu) \dd{\nu} = 1$. To ensure computational efficiency while maintaining a good representation of the profile, I truncate the line profile at $5\sigma$. Therefore, in practice, the normalization becomes:
 \begin{equation}
-    \int_{\nu_0 - 5\sigma}^{\nu_0 + 5\sigma}\phi(\nu) \dd{\nu} = 1
+    \int_{\nu_0 - 5\sigma}^{\nu_0 + 5\sigma}\phi(\nu) \dd{\nu} = 1.
 \end{equation}
+\qt{if have time, add a figure to demonstrate that this is reasonable for the lines concerned?}
 
-To solve the radiative transfer equation, we also need a background intensity $I_0$. For this we use the isotropic specific intensity on the observation side output by the \mdpdr{}, in the \mintinline{python}{_IncRadField.dat} file. 
-\qt{add explanation that our implementation is only valid for isotropic radiation and explains why we couldn't implement a more generic background specific intensity.}
+To solve the radiative transfer equation, I also need a background intensity $I_0$. For this, I use the isotropic specific intensity on the observer side, as provided by the \mdpdr{} in the file \mintinline{python}{_IncRadField.dat}. It is important to note that the current implementation is valid only for isotropic radiation; handling more general forms of background specific intensity would require additional modifications. \qt{add explanation why?}
 
-The external radiation field in the \mintinline{python}{_IncRadField.dat} file is in units of $\mr{erg\,cm^{-2}\,s^{-1}\,sr^{-1}\,\AA^{-1}}$, so we need to convert the specific intensity in to $\mr{erg\,cm^{-2}\,s^{-1}\,sr^{-1}\,Hz^{-1}}$,
+The external radiation field in the \mintinline{python}{IncRadField.dat} file is provided in units of \unit{erg\per\centi\meter\squared\per\second\per\steradian\per\angstrom}. However, to solve the radiative transfer equation, I need the specific intensity in units of \unit{erg\per\centi\meter\squared\per\second\per\steradian\per\Hz}. By energy conservation, $I_\nu |\dd{\nu}| = I_\lambda |\dd{\lambda}|$, and using $c = \lambda\nu$, I can derive the differential relation $\dd{\lambda} = -c/\nu^2 \dd{\nu}$. This allows me to convert between the two sets of units as follows:
 \begin{equation}
-    I_\nu |\dd{\nu}| = I_\lambda |\dd{\lambda}|  \Rightarrow I_\nu = I_\lambda \left|\frac{\dd{\lambda}}{\dd{\nu}}\right| = I_\lambda \frac{c}{\nu^2} = I_\lambda \frac{\lambda^2}{c}
-\end{equation}
-\begin{equation}
-    \lambda = \frac{c}{\nu} \Rightarrow \dd{\lambda} = -\frac{c}{\nu^2}\dd{\nu} \Rightarrow \left|\frac{\dd{\lambda}}{\dd{\nu}}\right| = \frac{c}{\nu^2} = \frac{\lambda^2}{c}
+    I_\nu = I_\lambda \left|\frac{\dd{\lambda}}{\dd{\nu}}\right| = I_\lambda \frac{c}{\nu^2} = I_\lambda \frac{\lambda^2}{c}.
 \end{equation}
 
-% In order to reduce numerical errors, we normalize Eq~\ref{eq:rte} as 
-% \begin{equation}
-    % \frac{4\pi}{h\nu}\fird[]{s}\left(\frac{I_\nu}{I_0}\right) = A_{ul} n_u\phi(\nu) +  B_{ul} n_u\frac{I_\nu}{I_0} \phi(\nu) -  B_{lu} n_l\frac{I_\nu}{I_0} \phi(\nu),
-% \end{equation}
-
-It is often more convenient to do a change of variable and integrate over optical depth
-\begin{equation}
-    \fird[I_\nu]{\tau_\nu} = S_\nu - I_\nu,
-\end{equation}
-with 
-\begin{equation}
-    \tau_\nu = \alpha_\nu \dd{s},\,S_\nu = \frac{j_\nu}{\alpha_\nu}
-\end{equation}
-\begin{equation}
-     \alpha_\nu = \frac{h\nu}{4\pi} \phi(\nu)(B_{lu}n_l - B_{ul} n_u)
-\end{equation}
-\begin{equation}
-    j_\nu = A_{ul} n_u \frac{h\nu}{4\pi} \phi(\nu)
-\end{equation}
-
-To test the solver, we first solve the radiative transfer with constant density profiles of both the lower and upper level, then the radiative transfer equation becomes
-\begin{equation}
-    \fird[I_\nu]{s} = c_1  + c_2 I_\nu, \label{eq:simple_rte}
-\end{equation} 
-with 
-\begin{align*}
-    &c_1 = A_{ul} n_u \frac{h\nu}{4\pi} \phi(\nu) = \mr{cst}\\
-    &c_2 = \left(B_{ul} n_u - B_{lu} n_l\right) \frac{h\nu}{4\pi} \phi(\nu) = \mr{cst}.c
-\end{align*}
-The analytical solution is 
-\begin{equation}
-    I_\nu (s) = (I_0 + \frac{c_1}{c_2})e^{c_2s} - \frac{c_1}{c_2}.
-\end{equation}
-
-For example, if we consider the \ce{CO} transition from v = 0, J = 2 to v = 0, J = 1, with a constant density profile of $n_u = \qty{2}{\cm^{-3}}$, $n_l = \qty{2}{\cm^{-3}}$, $A_{ul} = 6.911 \times 10^{-7} s^{-1}$
-\begin{itemize}
-    \item $h\nu/4\pi = 4.86234284e-16 $
-    \item $A_{ul} = 6.911e-07$
-    \item $B_{ul} = 3825410.21021763$
-    \item 
-\end{itemize}
+Thus far, we have focused on improving the modeling of the physical processes in PDRs. However, the observed spectra are inevitably influenced by the resolution of the instrument used for observation. The instrumental resolution effectively smooths out the line profile, broadening the observed lines and altering their shapes. Consequently, it is essential to account for the instrument's resolution in the modeling process. In the following section, I will discuss the convolution process and how it modifies the observed spectra.
 
 \subsection{Convolution}
 
