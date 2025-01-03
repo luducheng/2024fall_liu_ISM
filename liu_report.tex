@@ -350,7 +350,7 @@ The coefficients $A_{ul}, B_{ul}, B_{lu}$ in Eq.~\ref{eq:rte} are the Einstein c
 \end{equation}
 where $g_u$ and $g_l$ are the degeneracies of the upper and lower levels.
 
-In PDRs, the motion of atoms and molecules results in line broadening. Thermal motion produces a Gaussian profile, while turbulent motions contribute an additional broadening component. These effects are combined in the effective Doppler width, $\Delta \nu_D$, which is then included in the Gaussian line profile \parencite[see, e.g.,][Eqs.~10.68-10.72]{Rybicki1979}:
+In PDRs, the motion of atoms and molecules results in line broadening. Thermal motion produces a Gaussian profile, while microturbulent motions contribute an additional broadening component. The thermal and turbulent broadening effects are combined in the effective Doppler width, $\Delta \nu_D$, which is then included in the Gaussian line profile \parencite[see, e.g.,][Eqs.~10.68-10.72]{Rybicki1979}:
 \begin{equation}
     \phi(\nu) = \frac{1}{\sigma_\nu \sqrt{2 \pi}}\exp\left(-\frac{(\nu - \nu_0)^2}{2 \sigma_\nu^2}\right),
 \end{equation}
@@ -360,10 +360,10 @@ where
 \end{equation}
 Here, $\nu_0$ is the central frequency of the transition, $c$ is the speed of light, $T$ is the gas temperature, $m$ is the mass of the emitting species, and $v_\mr{turb} = \qty{2}{\km\per\second}$ is the turbulent velocity, as introduced in Table.~\ref{tab:params}.
 
-The line profile is normalized so that $\int_0^{\infty} \phi(\nu) \dd{\nu} = 1$. To ensure computational efficiency while maintaining a good representation of the profile, I truncate the line profile at $5\sigma$. Therefore, in practice, the normalization becomes:
-\begin{equation}
-    \int_{\nu_0 - 5\sigma}^{\nu_0 + 5\sigma}\phi(\nu) \dd{\nu} = 1.
-\end{equation}
+The line profile is normalized so that $\int_0^{\infty} \phi(\nu) \dd{\nu} = 1$. To ensure computational efficiency while maintaining a good representation of the profile, I truncate the line profile at $5\sigma$. Therefore, in practice, the normalization becomes $\int_{\nu_0 - 5\sigma}^{\nu_0 + 5\sigma}\phi(\nu) \dd{\nu} = 1$.
+% \begin{equation}
+%     \int_{\nu_0 - 5\sigma}^{\nu_0 + 5\sigma}\phi(\nu) \dd{\nu} = 1.
+% \end{equation}
 \qt{if have time, add a figure to demonstrate that this is reasonable for the lines concerned?}
 
 To solve the radiative transfer equation, I also need a background intensity $I_0$. For this, I use the isotropic specific intensity on the observer side, as provided by the \mdpdr{} in the file \mintinline{python}{_IncRadField.dat}. It is important to note that the current implementation is valid only for isotropic radiation; handling more general forms of background specific intensity would require additional modifications. \qt{add explanation why?}
@@ -376,6 +376,30 @@ The external radiation field in the \mintinline{python}{IncRadField.dat} file is
 Thus far, we have focused on improving the modeling of the physical processes in PDRs. However, the observed spectra are inevitably influenced by the resolution of the instrument used for observation. The instrumental resolution effectively smooths out the line profile, broadening the observed lines and altering their shapes. Consequently, it is essential to account for the instrument's resolution in the modeling process. In the following section, I will discuss the convolution process and how it modifies the observed spectra.
 
 \subsection{Convolution of Line Profiles with Instrumental Resolution}
+
+The spatial resolution of an instrument is typically characterized by its point spread function (PSF), which describes the response of the instrument to a point source. To account for the effects of instrumental resolution on the observed line profiles, I convolve the model's line profile with the PSF. Since the spatial grid provided by \mdpdr{} is non-uniform, I first interpolate it onto a uniform and monotonic grid.
+
+The PSF is often approximated as a Gaussian function. For this work, the Gaussian kernel is expressed as:
+\begin{equation}
+    g(x) = \frac{1}{\sqrt{2\pi}}\exp(-\frac{x^2}{2\sigma^2}),
+\end{equation}
+where $x$ is the distance from the center of the PSF, and $\sigma$ is the standard deviation of the Gaussian. The standard deviation $\sigma$ is related to the full width half maximum (FWHM) of the instrument by $\sigma = \text{FWHM}\,/\,(2\sqrt{2 \ln 2})$.
+
+To reduce computational cost, I truncate the Gaussian PSF at $3\sigma$, as the contribution from points beyond this range is negligible. The PSF is then normalized over the truncated range to conserve total intensity, with the normalization constant $K = \sum_{x=-3\sigma}^{3\sigma} g(x) \Delta x$, where $\Delta x$ is the spacing of the uniform grid.
+
+The convolution of the line profile, $f(x)$, with the normalized PSF is performed as:
+\begin{equation}
+    (f * g) (x) = \frac{1}{K} \sum_{\tau = x_{\min} - 3\sigma}^{x_{\max} + 3\sigma}F(\tau)g(x - \tau)\Delta x,
+\end{equation}
+where $x_{\min}$ and $x_{\max}$ define the bounds of the spatial grid, and $F(\tau)$ is the value of the line profile at point $\tau$. 
+
+Fig.~\ref{fig:convolution} illustrates how convolution alters the line profile. The convolved profiles demonstrate how increasing the FWHM progressively smooths the line profile, reducing peak intensity and redistributing the signal over a broader spatial range.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.88\textwidth,keepaspectratio]{convolution.pdf}
+    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3"$ (orange) and $30"$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution}
+\end{figure}
 
 \section{Results and Discussion}
 \subsection{Cloud Surface Curvature}
