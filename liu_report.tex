@@ -337,7 +337,7 @@ where $f(d)$ is the interpolated function of the level number density $n_X(d)$. 
 \end{equation}
 By considering the curvature of the cloud's surface, this column density allows for a more direct comparison with observations. However, this approach does not account for the absorption and emission processes occurring inside the cloud. For lines that are optically thick, the radiative transfer equation must be solved along the LoS to accurately reproduce the observed line profiles. This more detailed treatment will be addressed in the next section.
 
-\subsection{Radiative transfer equation}
+\subsection{Solving the Radiative Transfer Equation}
 In the previous calculation of the column densities, I assumed that all lines were optically thin. However, some lines can be optically thick, leading to differences in the observed line profiles for various lines, as seen in Fig~\ref{fig:observation}. To account for line extinction within the cloud, I need to solve the radiative transfer equation along the LoS \parencite[see, e.g.,][ Eq.~1.67]{Rybicki1979}:
 \begin{equation}
     \fird[I_\nu]{s} = A_{ul} n_u\frac{h\nu}{4\pi}\phi(\nu) +  B_{ul} n_u\frac{h\nu}{4\pi}I_\nu \phi(\nu) -  B_{lu} n_l\frac{h\nu}{4\pi}I_\nu \phi(\nu), \label{eq:rte}
@@ -375,7 +375,7 @@ The external radiation field in the \mintinline{python}{IncRadField.dat} file is
 
 Thus far, we have focused on improving the modeling of the physical processes in PDRs. However, the observed spectra are inevitably influenced by the resolution of the instrument used for observation. The instrumental resolution effectively smooths out the line profile, broadening the observed lines and altering their shapes. Consequently, it is essential to account for the instrument's resolution in the modeling process. In the following section, I will discuss the convolution process and how it modifies the observed spectra.
 
-\subsection{Convolution}
+\subsection{Convolution of Line Profiles with Instrumental Resolution}
 
 \section{Results and Discussion}
 \subsection{Cloud Surface Curvature}
