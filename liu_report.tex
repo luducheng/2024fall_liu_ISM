@@ -315,7 +315,7 @@ In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonza
         $C_D = N_H / E(B-V)$ & $1.57\times 10^{22}$\\
         \bottomrule
     \end{tabular}
-    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, $A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})$.  \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models(see Section~\ref{sec:cstnp}). \textsuperscript{3}\textcite{Mathis1983}. \textsuperscript{4}Perpendicular on observer side, isotropic on back side. \textsuperscript{5}In Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6} See Section.~\ref{sec:exactrt}. \textsuperscript{7}Only used in Doppler line broadening. \textsuperscript{8}\textcite{Fitzpatrick1990}. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mintinline{latex}{MeudonPDR}} documentation.} \label{tab:params}
+    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, $A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})$.  \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models(see Sec.~\ref{sec:cstnp}). \textsuperscript{3}\textcite{Mathis1983}. \textsuperscript{4}Perpendicular on observer side, isotropic on back side. \textsuperscript{5}In Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6} See Sec.~\ref{sec:exactrt}. \textsuperscript{7}Only used in Doppler line broadening. \textsuperscript{8}\textcite{Fitzpatrick1990}. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mintinline{latex}{MeudonPDR}} documentation.} \label{tab:params}
 \end{table}
 
 \begin{figure}
@@ -382,7 +382,7 @@ In Fig.~\ref{fig:cmpsurfb}, I compare the PDR models computed with and without s
 
 To summarize the model comparisons in this section, I will use the constant pressure model with exact radiative transfer of \ce{H2} and surface chemistry to consider the curvature of the cloud's surface in the following sections.
 
-\subsection{Column Density in a Spherical Geometry}
+\subsection{Modeling Column Densities in Spherical Geometry} \label{sec:sphere}
 \begin{wrapfigure}{r}{.32\textwidth}
     \centering
     \includegraphics[width=.25\textwidth]{sphere_geometry_2LoS.pdf}
@@ -460,7 +460,7 @@ The external radiation field in the \mintinline{python}{IncRadField.dat} file is
 
 Thus far, we have focused on improving the modeling of the physical processes in PDRs. However, the observed spectra are inevitably influenced by the resolution of the instrument used for observation. The instrumental resolution effectively smooths out the line profile, broadening the observed lines and altering their shapes. Consequently, it is essential to account for the instrument's resolution in the modeling process. In the following section, I will discuss the convolution process and how it modifies the observed spectra.
 
-\subsection{Convolution of Line Profiles with Instrumental Resolution}
+\subsection{Convolution of Line Profiles with Instrumental Resolution} \label{sec:convolution}
 
 The spatial resolution of an instrument is typically characterized by its point spread function (PSF), which describes the response of the instrument to a point source. To account for the effects of instrumental resolution on the observed line profiles, I convolve the model's line profile with the PSF. Since the spatial grid provided by \mdpdr{} is non-uniform, I first interpolate it onto a uniform and monotonic grid.
 
@@ -493,19 +493,25 @@ Fig.~\ref{fig:convolution} \qt{or Fig.~ model without surface chemistry? convolu
 \end{figure}
 
 \section{Results and Discussion}
-\subsection{Cloud Surface Curvature}
+\subsection{Convolved Column Densities from Spherical Geometry Model}
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[width=\textwidth,keepaspectratio]{column_densities.pdf}
-%     \caption{Comparison of normalized column density profiles for slab geometry (solid lines) and spherical geometry (solid lines with dots) with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$. In Panel 1, $N(\ce{C^+}\ \text{2P, J=3/2})$ (blue) and $N(\ce{C}\ \text{3P, J=1})$ (orange) are shown; in Panel 2, $N(\ce{CO}\ \text{v=0, J=2})$ (green) and $N(\ce{CO}\ \text{v=0, J=4})$ (red); and in Panel 3, $N(\ce{H2O}\ \text{J=1, ka=1, kc=0})$ (purple). The dashed gray lines indicate the maximum depth of the PDR model, $d_\mr{PDR}$. In the spherical geometry, due to the curvature, the emitting region appears to penetrate beyond the depth, creating an extended profile.} \label{fig:colden}  
-% \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{column_densities.pdf}
+    \caption{Comparison of normalized column density profiles for slab geometry (solid lines) and spherical geometry (solid lines with dots) with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$. In Panel 1, $N(\ce{C^+}\ \text{2P, J=3/2})$ (blue) and $N(\ce{C}\ \text{3P, J=1})$ (orange) are shown; in Panel 2, $N(\ce{CO}\ \text{v=0, J=2})$ (green) and $N(\ce{CO}\ \text{v=0, J=4})$ (red); and in Panel 3, $N(\ce{H2O}\ \text{J=1, ka=1, kc=0})$ (purple). The dashed gray lines indicate the maximum depth of the PDR model, $d_\mr{PDR}$. The rectangle marks the zoomed-in region in Panel 2.} \label{fig:colden}  
+\end{figure}
+
+In Secs.~\ref{sec:sphere} and \ref{sec:convolution}, I described the modeling of spherical geometry using the wrapper for the \mdpdr{} and the convolution of line profiles with the instrumental resolution. In this section, I present the convolved column density profiles for the spherical geometry model with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$. Comparisons are made first between the spherical and slab geometry models, then between the unconvolved and convolved profiles, and finally between the convolved profiles and the observational data.
+
+Fig.~\ref{fig:colden} compares the profiles from the spherical geometry model with those from the slab geometry model. In the spherical geometry model, the curvature of the cloud's surface causes the PDR layer to bend away from the tangent at the cloud's surface, in contrast to the slab geometry, where the PDR layer is directly at the surface. As a result, the PDR layer reaches greater depths in the spherical geometry, producing a more extended profile. Additionally, the peaks shift to deeper locations within the cloud, as the line of sight (LoS) passing through the greatest distance within the emitting region is slightly behind the emitting region. When convolution is applied, the line profiles are smoothed and further extended (Fig.~\ref{fig:convvcolden}), with the peaks shifting to greater depths. The convex tail behind the emitting region disappears, yielding a more Gaussian-like shape. 
+
+The convolved profiles provide a closer match to the observed data, as shown in Fig.\ref{fig:colden_Rcloud5pc}, particularly in terms of the shape and extent of the profiles. This suggests that the inclusion of curvature and convolution improves the modelling of the observed column density profiles. In the following section, I investigate how varying the cloud radius affects the column density profiles.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{convolved_column_densities.pdf}
-    % \caption{Similar to Fig.~\ref{fig:colden}, but with convolved column densities (dashed-dotted lines). The profiles for slab geometry (solid lines) and spherical geometry (solid lines with dots) are also shown for comparison.} \label{fig:convvcolden}  
-    \caption{Comparison of normalized column density profiles for slab geometry (solid lines), spherical geometry (solid lines with dots) with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$, and spherical geometry convolved with the instrument resolution ($38.1”$). Panel 1 shows $N(\ce{C^+}\ \text{2P, J=3/2})$ (blue) and $N(\ce{C}\ \text{3P, J=1})$ (orange); Panel 2 shows $N(\ce{CO}\ \text{v=0, J=2})$ (green) and $N(\ce{CO}\ \text{v=0, J=4})$ (red); and Panel 3 shows $N(\ce{H2O}\ \text{J=1, ka=1, kc=0})$ (purple). The dashed gray lines indicate the maximum depth of the PDR model, $d_\mr{PDR}$. In spherical geometry, curvature causes the emitting region to appear to extend beyond this depth. Convolution further smooths the line shapes and extends the profiles.} \label{fig:convvcolden}
+    \caption{Similar to Fig.~\ref{fig:colden}, but with the addition of convolved column densities (dashed-dotted lines), alongside the profiles for slab geometry (solid lines) and spherical geometry (solid lines with dots).} \label{fig:convvcolden}
+    % \caption{Comparison of normalized column density profiles for slab geometry (solid lines), spherical geometry (solid lines with dots) with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$, and spherical geometry convolved with the instrument FWHM, $38.1''$. Panel 1 shows $N(\ce{C^+}\ \text{2P, J=3/2})$ (blue) and $N(\ce{C}\ \text{3P, J=1})$ (orange); Panel 2 shows $N(\ce{CO}\ \text{v=0, J=2})$ (green) and $N(\ce{CO}\ \text{v=0, J=4})$ (red); and Panel 3 shows $N(\ce{H2O}\ \text{J=1, ka=1, kc=0})$ (purple). The dashed gray lines indicate the maximum depth of the PDR model, $d_\mr{PDR}$. In spherical geometry, curvature causes the emitting region to appear to extend beyond this depth. Convolution further smooths the line shapes and extends the profiles.} \label{fig:convvcolden}
 \end{figure}
 
 \begin{figure}
@@ -513,6 +519,10 @@ Fig.~\ref{fig:convolution} \qt{or Fig.~ model without surface chemistry? convolu
     \includegraphics[width=\textwidth,keepaspectratio]{colden_Rcloud5pc.pdf}
     \caption{Comparison of column density profiles for a model with spherical geometry ($R_\mr{cloud} = \qty{5}{pc}$, solid lines) and observations (dashed lines). The unconvolved profiles (dotted lines) are also shown for comparison.} \label{fig:colden_Rcloud5pc}
 \end{figure}
+
+\subsection{Effect of Cloud Radius on Column Densities}
+
+Different choices of the cloud radius $R_\mr{cloud}$ affects the curvature of the cloud's surface and the extent of the PDR region, tuning the shape of the tail of the profile (Fig.~\ref{fig:colden_Rcloud}). As the cloud radius increases, the curvature of the surface reduced, and the PDR resemles. The column density profiles become more extended and less peaked, with the peaks shifting to greater depths within the cloud. The convolved profiles show a similar trend, with the line shapes becoming smoother and more Gaussian-like as the cloud radius increases. The convolved profiles for the models with $R_\mr{cloud} = \qty{3.0}{pc}$ and \qty{5.0}{pc} provide a better match to the observed data, particularly in terms of the extent and shape of the profiles.
 
 \begin{figure}
     \centering
