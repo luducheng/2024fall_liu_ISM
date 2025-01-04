@@ -422,7 +422,7 @@ where $f(d)$ is the interpolated function of the level number density $n_X(d)$. 
 \end{equation}
 By considering the curvature of the cloud's surface, this column density allows for a more direct comparison with observations. However, this approach does not account for the absorption and emission processes occurring inside the cloud. For lines that are optically thick, the radiative transfer equation must be solved along the LoS to accurately reproduce the observed line profiles. This more detailed treatment will be addressed in the next section.
 
-\subsection{Solving the Radiative Transfer Equation}
+\subsection{Solving the Radiative Transfer Equation} \label{sec:rte}
 In the previous calculation of the column densities, I assumed that all lines were optically thin. However, some lines can be optically thick, leading to differences in the observed line profiles for various lines, as seen in Fig~\ref{fig:observation}. To account for line extinction within the cloud, I need to solve the radiative transfer equation along the LoS \parencite[see, e.g.,][ Eq.~1.67]{Rybicki1979}:
 \begin{equation}
     \fird[I_\nu]{s} = A_{ul} n_u\frac{h\nu}{4\pi}\phi(\nu) +  B_{ul} n_u\frac{h\nu}{4\pi}I_\nu \phi(\nu) -  B_{lu} n_l\frac{h\nu}{4\pi}I_\nu \phi(\nu), \label{eq:rte}
@@ -478,7 +478,7 @@ The convolution of the line profile, $f(x)$, with the normalized PSF is performe
 \end{equation}
 where $x_{\min}$ and $x_{\max}$ define the bounds of the spatial grid, and $F(\tau)$ is the value of the line profile at point $\tau$. 
 
-Fig.~\ref{fig:convolution} \qt{or Fig.~ model without surface chemistry? convolution\_nosurfchem.pdf} illustrates how convolution alters the line profile. The convolved profiles demonstrate how increasing the FWHM progressively smooths the line profile, reducing peak intensity and redistributing the signal over a broader spatial range.
+Fig.~\ref{fig:convolution} \qt{or Fig.~\ref{fig:convolution_nosurfchem}?} illustrates how convolution alters the line profile. The convolved profiles demonstrate how increasing the FWHM progressively smooths the line profile, reducing peak intensity and redistributing the signal over a broader spatial range.
 
 % \begin{figure}[h]
 %     \centering
@@ -522,15 +522,17 @@ The convolved profiles provide a closer match to the observed data, as shown in 
 
 \subsection{Effect of Cloud Radius on Column Densities}
 
-Different choices of the cloud radius $R_\mr{cloud}$ affects the curvature of the cloud's surface and the extent of the PDR region, tuning the shape of the tail of the profile (Fig.~\ref{fig:colden_Rcloud}). As the cloud radius increases, the curvature of the surface reduced, and the PDR resemles. The column density profiles become more extended and less peaked, with the peaks shifting to greater depths within the cloud. The convolved profiles show a similar trend, with the line shapes becoming smoother and more Gaussian-like as the cloud radius increases. The convolved profiles for the models with $R_\mr{cloud} = \qty{3.0}{pc}$ and \qty{5.0}{pc} provide a better match to the observed data, particularly in terms of the extent and shape of the profiles.
+There are no significant changes to the rising side of the profiles or the locations of the peaks with varying cloud radius $R_\mr{cloud}$. Instead, variations in $R_\mr{cloud}$ primarily affect the shape of the profile's tail (Fig.~\ref{fig:comprad}). As the cloud radius increases, the surface curvature decreases, making the emitting region more tangent to the LoS at the same depth from the cloud's surface. This reduces the passage length and, consequently, causes the tail to decline more steeply.
+
+None of the models reproduce the observed profiles accurately. A direct comparison, with profiles overlapped to emphasize differences in shape, is provided in Fig.\ref{fig:comprad_shape} in the appendix. Notably, the observed profiles exhibit significant variation in the tail shape, whereas the modeled profiles remain quite similar. This discrepancy is likely due to the lack of a detailed treatment of radiative transfer in the models, as mentioned in Sec.\ref{sec:rte}, which we will address in the next section.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{comp_cloud_radius.pdf}
-    \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = $ \qty{0.5}{pc} (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). Observations are shown as dotted lines. A schematic representation of the cloud radii is included in the bottom right corner. The areas marked by black rectangles are shown with greater detail in zoomed-in views.} \label{fig:compcloudrad}
+    \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = $ \qty{0.5}{pc} (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). Observations are shown as dotted lines. A schematic representation of the cloud radii is included in the bottom right corner. The areas marked by black rectangles are shown with greater detail in zoomed-in views.} \label{fig:comprad}
 \end{figure}
 
-\subsection{Line Profiles}
+\subsection{Line Profiles with Radiative Transfer}
 
 \section{Conclusions}
 
@@ -539,5 +541,16 @@ Different choices of the cloud radius $R_\mr{cloud}$ affects the curvature of th
 
 \newpage
 \appendix
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.88\textwidth,keepaspectratio]{convolution_nosurfchem.pdf}
+    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3"$ (orange) and $30"$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{comp_curvature_obs_shape.pdf}
+    \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = \qty{0.5}{pc}$ (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). The profiles are shifted to align with the peak locations in the observational data (dotted lines), with the corresponding shifts for each model indicated in the legend.} \label{fig:comprad_shape}
+\end{figure}
 
 \end{document}
