@@ -534,7 +534,27 @@ None of the models reproduce the observed profiles accurately. A direct comparis
 
 \subsection{Line Profiles with Radiative Transfer}
 
+To validate the solver, we test it by solving the radiative transfer equation with constant density profiles for both the lower and upper levels. In this case, the radiative transfer equation simplifies to:
+\begin{equation}
+    \fird[I_\nu]{s} = c_1  + c_2 I_\nu, \label{eq:simple_rte}
+\end{equation} 
+where $c_1 = A_{ul} n_u \phi(\nu) h\nu/4\pi$ and $c_2 = (B_{ul} n_u - B_{lu} n_l) \phi(\nu) h\nu/4\pi$ are constants. The analytical solution to this equation is:
+\begin{equation}
+    I_\nu (s) = (I_0 + \frac{c_1}{c_2})e^{c_2s} - \frac{c_1}{c_2}.
+\end{equation}
+For this toy problem, we solve the radiative transfer equation for the \ce{CO} transition from  \(v = 0\), \(J = 2\) to \(v = 0\), \(J = 1\), assuming constant density profiles of $n_u = \qty{2}{\cm^{-3}}$ and $n_l = \qty{2}{\cm^{-3}}$. The computed results are compared with the analytical solution in Fig.~\ref{fig:rtecstn}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{rte_constant_density.pdf}
+    \caption{Comparison of the computed (blue solid lines) and analytical (orange dashed lines) solutions to the radiative transfer equation for the \ce{CO} transition from \(v = 0\), \(J = 2\) to \(v = 0\), \(J = 1\) along LoS with different impact parameters in a \(\qty{5}{pc}\) cloud. The right axes show the ratio between the numerical solution and the analytical one.} \label{fig:rtecstn}
+\end{figure}
+
+
+Due to time constraints, I was unable to fully implement the method discussed in Sec.~\ref{sec:rte}. Specifically, my results are limited to solving the radiative transfer equation at the line center, without taking into account the line-broadening profile, $\phi(\nu)$. Despite this limitation, the implemented methods illustrate how solving the radiative transfer equation along the LoS affects the shape of the profiles. Future work could build on these results by incorporating the full line-broadening profile and comparing the results with observed data.
+
 \section{Conclusions}
+
 
 \newpage
 \printbibliography
@@ -547,7 +567,7 @@ None of the models reproduce the observed profiles accurately. A direct comparis
     \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3"$ (orange) and $30"$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[hb]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{comp_curvature_obs_shape.pdf}
     \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = \qty{0.5}{pc}$ (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). The profiles are shifted to align with the peak locations in the observational data (dotted lines), with the corresponding shifts for each model indicated in the legend.} \label{fig:comprad_shape}
