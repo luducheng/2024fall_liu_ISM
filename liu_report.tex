@@ -209,21 +209,28 @@
 \newpage
 \section{Introduction}
 
-The interstellar medium (ISM) is composed of gas and dust between stars in galaxies. The ISM is site of star formation and takes up around $\sim 10\%$ of total baryonic mass \qt{cite Drain2011}. In return, the radiation field produced by stars is responsible for the heating the gas and dust that cool in bright line and continuum emission. These emission lines provide information about the physical conditions inside the ISM, such as the temperature, density and chemical composition.
+The interstellar medium (ISM) is composed of gas and dust between stars in galaxies. The ISM is site of star formation and takes up around $\sim 10\%$ of total baryonic mass \parencite{Draine2011}. In return, the radiation field produced by stars is responsible for the heating the gas and dust that cool in bright line and continuum emission. These emission lines provide information about the physical conditions inside the ISM, such as the temperature, density and chemical composition.
 
 Models have long been developed to help us interpret these
 
 
-The 1D slab geometry may not be approprioate in some cases, and the curvature of the PDR region needs to be taken into account in order to reproduce the line profiles. A common technique is to use a time-dependent hydrodynamic simulation to obtain the density and velocity fields and then to postprocess it with a PDR code to obtain the steady-state chemical abundances and thermal equilibrium gas temperature (e.g., Levrier et al. 2012).
+The 1D slab geometry may not be approprioate in some cases, and the curvature of the PDR region needs to be taken into account in order to reproduce the line profiles. A common technique is to use a time-dependent hydrodynamic simulation to obtain the density and velocity fields and then to postprocess it with a PDR code to obtain the steady-state chemical abundances and thermal equilibrium gas temperature (e.g., Levrier et al. 2012). 
+
+In this project, I aim to develop a wrapper for the \mdpdr{} code that can take the output of the slab geometry model and compute the column density in spherical geometry. I will also consider the radiative transfer of the lines.
 
 \subsection{Photodissociation Regions (PDRs)}
-Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemistry or heating processes\parencite{Tielens1985}. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
+Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemical or heating processes\parencite{Tielens1985}. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
 
-\begin{figure}
+\begin{figure}[hb]
     \centering
-    \includegraphics[width=.7\textwidth,keepaspectratio]{figures/PDRScheme_Wolfire2022fig2.png}
-    \caption{Schematic of a photodissociation region as a function of visual extinction $A_V$. Reprinted from \textcite{Wolfire2022}.}
+    \includegraphics[width=.7\textwidth,keepaspectratio]{figures/PDRScheme.png}
+    \caption{Schematic of a photodissociation region as a function of visual extinction $A_V$. Reprinted from \textcite{Wolfire2022}, Fig.~2. Red text indicates the dominant heating mechanisms, with "P.E." referring to photoelectric effects and "C.R." referring to cosmic rays. Blue text represents the main line emissions, which are the main cooling mechanisms.} \label{fig:pdrscheme}
 \end{figure}
+
+PDRs are the primary sources of infrared (IR) line and continuum radiation in galaxies \parencite{Crawford1985,Stacey2010}. Grains absorb the majority of the FUV radiation and re-radiate it in the IR continuum, but a fraction of the FUV photons heat the gas, which then cool through line emission. Together, the line and continuum emission provide important insights into the physical and chemical conditions in PDRs. The study of PDRs is vital for understanding star formation and galaxy evolution. Observations of PDRs help to constrain key physical parameters such as temperature, chemical composition, and radiative energy, probing the local environments of star-forming regions and the potential presence of stellar feedback.
+
+Fig.~\ref{fig:pdrscheme} shows a one-dimensional (1D) structure of PDR illuminated by radiation field from the left. The adjacent \ce{H_{II}} region absorbs extreme-ultraviolet (EUV; $h\nu > \qty{13.6}{eV}$) photons, leaving FUV photons that create the PDR. Atomic hydrogen, helium, and oxygen are neutral because their ionization potentials exceed \qty{13.6}{eV}, while molecules are photodissociated, and metals like carbon, silicon, and sulfur are singly ionized. The heating process is dominated by photoelectric effects on small grains and polycyclic aromatic hydrocarbons (PAHs), and the cooling process is dominanted by fine-structure line emission. As the depth increases and FUV radiation diminishes, \ce{H2} forms, followed by \ce{CO}. Both \ce{H2} and \ce{CO} photodissociate via line absorption and can therefore self-shield, allowing them to form closer to the surface than other molecules like \ce{H2O} or \ce{O2}, which dissociate via FUV continuum. In the deepest layers, cosmic rays dominate the heating process, and rotational transitions of \ce{CO} become the primary coolants.
+
 \subsection{The Horsehead Nebula}
 % \begin{figure}
 %     \centering
@@ -237,18 +244,19 @@ Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6
 %     \caption{\href{https://www.esa.int/ESA_Multimedia/Images/2024/04/Webb_captures_iconic_Horsehead_Nebula_in_unprecedented_detail}{Three views of the Horsehead Nebula}. The first image (left) features the Horsehead Nebula as seen by ESA's Euclid telescope. The second image (middle) shows the NASA/ESA Hubble Space Telescope's infrared view of the Horsehead Nebula. The third image (right) features a new view of the Horsehead Nebula from the NASA/ESA/CSA James Webb Space Telescope's NIRCam (Near-InfraRed Camera) instrument.}
 % \end{figure}
 
+The Horsehead Nebula (Fig.~\ref{fig:obsimg} and cover image) is a well-known PDR that has been extensively studied in the literature. It is illuminated by $\sigma$ Orionis, a O9.5V binary star system \parencite{Warren1977}, located 3.5 pc from the edge of the PDR \parencite{Abergel2003,Schirmer2020}, resulting in an incident radiation field of around \qty{2.7e-3}{erg\,\second^{-1}\,\centi\metre^{-2}} \parencite{Habart2005}. 
+
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{horsehead_HernandezVera2023.pdf}
     \caption{Multiphase view of the Horsehead nebula (Barnard 33). Reprinted from \textcite{HernándezVera2023}. Left: Composite color image of the Horsehead nebula observed with the VLT (ESO). Right: Zoomed-in view of the edge of the molecular cloud, imaged with ALMA in the \ce{CO} $J = 3-2$ line emission (blue) and the \qty{0.9}{m} KPNO telescope in the H$\alpha$ line emission. The dark region represents the neutral atomic layer.} \label{fig:obsimg}
 \end{figure}
 
-In order to compare with observations, we need to convert the distance unit \unit{cm} used the in \mdpdr{} into the \unit{arcsec} unit used in observation,
-
+In observational studies, it is customary to use arcseconds as the distance unit. As the Horsehead PDR is located approximately \qty{400}{pc} from us \parencite{Menten2007, Schlafly2014}, the distance unit can be converted as:
 \begin{equation}
-    \alpha["] = \frac{d\,[\unit{pc}]}{400\,\unit{pc}} \frac{1\,\unit{arcsec}}{1\,\unit{rad}}\textbf{}
+    \alpha[''] = \frac{d\,[\unit{pc}]}{400\,\unit{pc}} \frac{1''}{1\,\unit{rad}}.
 \end{equation}
-where \qty{400}{pc} \parencite{Menten2007, Schlafly2014} is the distance to the horsehead nebula.
+This gives \(1''\) corresponding to \qty{1.9}{mpc}. The horsehead PDR is nearly edge-on, with an upper limit for the angle of $6^\circ$ \parencite{Habart2005}.
 
 For lines that are optically thin, the local emissitivity is given by
 \begin{equation}
@@ -258,7 +266,7 @@ For lines that are optically thin, the local emissitivity is given by
 \section{Data}
 The observational data used in this study (Fig.~\ref{fig:observation}) were obtained from the Heterodyne Instrument for the Far-Infrared (HIFI) \parencite{deGraauw2010} onboard the Herschel Space Observatory \parencite{Pilbratt2010}. All data are convolved to the spatial resolution of the HIFI H2O data, $38.1$ arcsec. The observed molecular species were detected at specific wavelengths corresponding to transitions listed in Table~\ref{tab:lines}. 
 
-\begin{figure}
+\begin{figure}[hb]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{observed_lines.pdf}
     \caption{Observed line profiles of the Horsehead Nebula by Herschel HIFI. Reproduced from \qt{cite the original paper}. \qt{?The \ce{^{13}CO} lines has been removed due to bad weather condition during the observation.}} \label{fig:observation}
@@ -339,7 +347,7 @@ Observations of the Horsehead Nebula reveal a steep density gradient in the PDRs
     \caption{Comparison of the cloud structure computed with constant density $n_H = \qty{3e5}{cm^{-3}}$ (left) and constant pressure $P = \qty{5e6}{K\,cm^{-3}}$ (right), with a shared legend displayed in the left plot. All other parameters are the same as those listed in Table.~\ref{tab:params}.} \label{fig:cmp_cstp_cstn}
 \end{figure}
 
-\begin{figure}[hb]
+\begin{figure}[ht]
     \centering
     \includegraphics[width=.49\textwidth,keepaspectratio]{struct_nH3e5_arcsec.pdf}
     \includegraphics[width=.49\textwidth,keepaspectratio]{struct_P5e6_arcsec.pdf}
@@ -350,7 +358,7 @@ Observations of the Horsehead Nebula reveal a steep density gradient in the PDRs
 
 There are two options available in the \mdpdr{} for treating radiative transfer in the UV. The first is the FGK approximation \parencite{Federman1979}, in which the self-shielding of \ce{H} and \ce{H2} molecules is treated approximately. Self-shielding occurs when molecules absorb radiation in their own spectral lines, reducing the flux available to penetrate deeper into the cloud. However, the FGK approximation neglects mutual shielding, where the overlap and interaction of absorption lines between different species or multiple lines of the same species further attenuate the radiation field.
 
-\begin{figure}[ht]
+\begin{figure}[h]
     \centering
     \includegraphics[width=.92\textwidth,keepaspectratio]{spectra_fgkh2_1.pdf}
     % \includegraphics[width=.88\textwidth,keepaspectratio]{spectra_fgkh2_2.pdf}
@@ -483,13 +491,13 @@ Fig.~\ref{fig:convolution} \qt{or Fig.~\ref{fig:convolution_nosurfchem}?} illust
 % \begin{figure}[h]
 %     \centering
 %     \includegraphics[width=.88\textwidth,keepaspectratio]{convolution_nosurfchem.pdf}
-%     \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3"$ (orange) and $30"$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
+%     \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
 % \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=.88\textwidth,keepaspectratio]{convolution.pdf}
-    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3"$ (orange) and $30"$ (green), with a zoomed-in view of the area within the dashed rectangle. The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution}
+    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green), with a zoomed-in view of the area within the dashed rectangle. The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution}
 \end{figure}
 
 \section{Results and Discussion}
@@ -526,7 +534,7 @@ There are no significant changes to the rising side of the profiles or the locat
 
 None of the models reproduce the observed profiles accurately. A direct comparison, with profiles overlapped to emphasize differences in shape, is provided in Fig.\ref{fig:comprad_shape} in the appendix. Notably, the observed profiles exhibit significant variation in the tail shape, whereas the modeled profiles remain quite similar. This discrepancy is likely due to the lack of a detailed treatment of radiative transfer in the models, as mentioned in Sec.\ref{sec:rte}, which we will address in the next section.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{comp_cloud_radius.pdf}
     \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = $ \qty{0.5}{pc} (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). Observations are shown as dotted lines. A schematic representation of the cloud radii is included in the bottom right corner. The areas marked by black rectangles are shown with greater detail in zoomed-in views.} \label{fig:comprad}
@@ -544,12 +552,11 @@ where $c_1 = A_{ul} n_u \phi(\nu) h\nu/4\pi$ and $c_2 = (B_{ul} n_u - B_{lu} n_l
 \end{equation}
 For this toy problem, we solve the radiative transfer equation for the \ce{CO} transition from  \(v = 0\), \(J = 2\) to \(v = 0\), \(J = 1\), assuming constant density profiles of $n_u = \qty{2}{\cm^{-3}}$ and $n_l = \qty{2}{\cm^{-3}}$. The computed results are compared with the analytical solution in Fig.~\ref{fig:rtecstn}.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{rte_constant_density.pdf}
     \caption{Comparison of the computed (blue solid lines) and analytical (orange dashed lines) solutions to the radiative transfer equation for the \ce{CO} transition from \(v = 0\), \(J = 2\) to \(v = 0\), \(J = 1\) along LoS with different impact parameters in a \(\qty{5}{pc}\) cloud. The right axes show the ratio between the numerical solution and the analytical one.} \label{fig:rtecstn}
 \end{figure}
-
 
 Due to time constraints, I was unable to fully implement the method discussed in Sec.~\ref{sec:rte}. Specifically, my results are limited to solving the radiative transfer equation at the line center, without taking into account the line-broadening profile, $\phi(\nu)$. Despite this limitation, the implemented methods illustrate how solving the radiative transfer equation along the LoS affects the shape of the profiles. Future work could build on these results by incorporating the full line-broadening profile and comparing the results with observed data.
 
@@ -564,11 +571,10 @@ Due to time constraints, I was unable to fully implement the method discussed in
 \begin{figure}[h]
     \centering
     \includegraphics[width=.88\textwidth,keepaspectratio]{convolution_nosurfchem.pdf}
-    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3"$ (orange) and $30"$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
-\end{figure}
+    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
 
-\begin{figure}[hb]
-    \centering
+    \vspace{2em}
+
     \includegraphics[width=\textwidth,keepaspectratio]{comp_curvature_obs_shape.pdf}
     \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = \qty{0.5}{pc}$ (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). The profiles are shifted to align with the peak locations in the observational data (dotted lines), with the corresponding shifts for each model indicated in the legend.} \label{fig:comprad_shape}
 \end{figure}
