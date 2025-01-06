@@ -211,13 +211,6 @@
 
 The interstellar medium (ISM) is composed of gas and dust between stars in galaxies. The ISM is site of star formation and takes up around $\sim 10\%$ of total baryonic mass \parencite{Draine2011}. In return, the radiation field produced by stars is responsible for the heating the gas and dust that cool in bright line and continuum emission. These emission lines provide information about the physical conditions inside the ISM, such as the temperature, density and chemical composition.
 
-Models have long been developed to help us interpret these
-
-
-The 1D slab geometry may not be approprioate in some cases, and the curvature of the PDR region needs to be taken into account in order to reproduce the line profiles. A common technique is to use a time-dependent hydrodynamic simulation to obtain the density and velocity fields and then to postprocess it with a PDR code to obtain the steady-state chemical abundances and thermal equilibrium gas temperature (e.g., Levrier et al. 2012). 
-
-In this project, I aim to develop a wrapper for the \mdpdr{} code that can take the output of the slab geometry model and compute the column density in spherical geometry. I will also consider the radiative transfer of the lines.
-
 \subsection{Photodissociation Regions (PDRs)}
 Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemical or heating processes\parencite{Tielens1985}. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
 
@@ -246,7 +239,7 @@ Fig.~\ref{fig:pdrscheme} shows a one-dimensional (1D) structure of PDR illuminat
 
 The Horsehead Nebula (Fig.~\ref{fig:obsimg} and cover image) is a well-known PDR that has been extensively studied in the literature. It is illuminated by $\sigma$ Orionis, a O9.5V binary star system \parencite{Warren1977}, located 3.5 pc from the edge of the PDR \parencite{Abergel2003,Schirmer2020}, resulting in an incident radiation field of around \qty{2.7e-3}{erg\,\second^{-1}\,\centi\metre^{-2}} \parencite{Habart2005}. 
 
-\begin{figure}
+\begin{figure}[ht]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{horsehead_HernandezVera2023.pdf}
     \caption{Multiphase view of the Horsehead nebula (Barnard 33). Reprinted from \textcite{HernándezVera2023}. Left: Composite color image of the Horsehead nebula observed with the VLT (ESO). Right: Zoomed-in view of the edge of the molecular cloud, imaged with ALMA in the \ce{CO} $J = 3-2$ line emission (blue) and the \qty{0.9}{m} KPNO telescope in the H$\alpha$ line emission. The dark region represents the neutral atomic layer.} \label{fig:obsimg}
@@ -258,15 +251,25 @@ In observational studies, it is customary to use arcseconds as the distance unit
 \end{equation}
 This gives \(1''\) corresponding to \qty{1.9}{mpc}. The horsehead PDR is nearly edge-on, with an upper limit for the angle of $6^\circ$ \parencite{Habart2005}.
 
-For lines that are optically thin, the local emissitivity is given by
-\begin{equation}
-    \epsilon_{ul} \simeq \frac{1}{4\pi}A_{ul}n_u h\nu_{ul} \propto n_u
-\end{equation}
+% For lines that are optically thin, the local emissitivity is given by
+% \begin{equation}
+%     \epsilon_{ul} \simeq \frac{1}{4\pi}A_{ul}n_u h\nu_{ul} \propto n_u
+% \end{equation}
 
-\section{Data}
+\subsection{Motivation}
+While 1D PDR models have been instrumental in advancing our understanding of PDRs, they come with some limitations. Classic PDR models assume a 1D slab geometry, treating the cloud structure as uniform along a single line of sight (LoS). However, in reality, the curvature of the PDR surface introduces variations in physical conditions within the same telescope beam. Accounting for this curvature is crucial to accurately reproduce observed line profiles.
+
+Another limitation of classic PDR models is their omission of absorption of line emission by the cloud itself. As emission lines propagate in PDRs, they can be absorbed along the LoS and become optically thick, potentially leading to inaccurate line ratios and distorted profiles \parencite{Abel2007,Guevara2020}.
+
+These limitations can hinder the accurate interpretation of observational data and the determination of physical parameters from PDR models. Observers have called for more sophisticated models that can account for both the curvature of PDR surfaces and the radiative transfer of line emission through the medium. To address these shortcomings, this project aims to develop a wrapper for the \mdpdr{}. This wrapper will build on the output from the 1D model and compute column densities in spherical geometry. Additionally, the project will attempt to solve the radiative transfer equation along the line of sight (LoS) to provide a more accurate representation of PDR line emission and its propagation through the medium.
+
+The report is organized as follows: Sec.~\ref{sec:data} describes the observational data used in this study. Sec.\ref{sec:methods} outlines the methods. Specifically, in Sec.\ref{sec:mdpdr}, I provide an overview of the \mintinline{python}{MeudonPDR} models, with Secs.\ref{sec:cstnp}, \ref{sec:exactrt}, and \ref{sec:surfchem} describing how model parameters are determined, including comparisons between constant density and constant pressure models, the effects of the exact method of radiative transfer, and the effects of surface chemistry, respectively. In Sec.\ref{sec:sphere}, I describe how column densities in spherical geometry are computed. Sec.\ref{sec:rte} discusses the solution of the radiative transfer equation along the LoS. Sec.\ref{sec:convolution} outlines the process of convolving model outputs with instrumental resolution. Sec.~\ref{sec:results} presents the results, with Sec.~\ref{sec:convcolden} focusing on the convolved column densities, Sec.~\ref{sec:comprad} on the effects of varying cloud radius, and Sec.~\ref{sec:comprte} on the preliminary results of considering radiative transfer. Finally, Sec.~\ref{sec:conclusion} summarizes the conclusions and discusses the prospects of the study.
+
+
+\section{Data} \label{sec:data}
 The observational data used in this study (Fig.~\ref{fig:observation}) were obtained from the Heterodyne Instrument for the Far-Infrared (HIFI) \parencite{deGraauw2010} onboard the Herschel Space Observatory \parencite{Pilbratt2010}. All data are convolved to the spatial resolution of the HIFI H2O data, $38.1$ arcsec. The observed molecular species were detected at specific wavelengths corresponding to transitions listed in Table~\ref{tab:lines}. 
 
-\begin{figure}[hb]
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{observed_lines.pdf}
     \caption{Observed line profiles of the Horsehead Nebula by Herschel HIFI. Reproduced from \qt{cite the original paper}. \qt{?The \ce{^{13}CO} lines has been removed due to bad weather condition during the observation.}} \label{fig:observation}
@@ -292,14 +295,8 @@ The observational data used in this study (Fig.~\ref{fig:observation}) were obta
     \caption{Parameters of transitions in the observation data used in this study.} \label{tab:lines}
 \end{table}
 
-% The observational data used in this study were obtained from the [Name of Survey or Telescope], which observed the Horsehead Nebula at millimeter and infrared wavelengths. These observations focus on the molecular gas in the nebula, particularly the abundances and temperature of key species such as \(\ce{H2}\), \(\ce{CO}\), and \(\ce{H2O}\). The observations provide high-resolution spectra and spatial data, allowing us to examine the molecular structure of the nebula at various depths.
-
-% The data were obtained with a spatial resolution of [x] arcseconds and a spectral resolution of [y] km/s. The observed molecular species were detected at specific wavelengths corresponding to rotational transitions of \(\ce{H2}\), \(\ce{CO}\), and \(\ce{H2O}\). These observations provide valuable insights into the molecular abundances and gas temperature at different layers of the nebula.
-
-
-\section{Methods}
-\subsection{The \mdpdr{}}
-% first, ISM models in general
+\section{Methods} \label{sec:methods}
+\subsection{The \mdpdr{}} \label{sec:mdpdr}
 % caveats? PDR annual review section 5.5
 A significant heterogeneity exists among the available PDR models, which differ in their geometry, physical and chemical structures, and model parameters. \textcite{Röllig2007} suggest that the choice of a spedific code should depend on the physical and chemical processes implemented in the code, as well as the characteristics of the emission source. 
 
@@ -376,7 +373,7 @@ Fig.\ref{fig:cmpH2rtspectra} compares spectra from $1074~\text{\AA}$ to $1080~\t
     \caption{Comparison of temperature profile and abundances for models computed with (solid) and without (dashed) exact radiative transfer (RT) of \ce{H2}: \ce{H} species and \ce{O} (left), and \ce{C} species, \ce{CO}, and \ce{H2O} (right). } \label{fig:cmpH2rt}
 \end{figure}
 
-\subsubsection{Models with Surface Chemistry}
+\subsubsection{Models with Surface Chemistry} \label{sec:surfchem}
 In the ISM, direct gas-phase formation of molecules is very inefficient. Instead, molecules are formed on the surfaces of dust grains, which act as catalysts by providing a surface for adsorbed atoms to meet and react. The grains also absorb the excess energy released by the formation process, preventing dissociation that would otherwise occur in the gas-phase formation. The formation of \ce{H2} is a key demonstration of the importance of this process, as the gas-phase formation rate of \ce{H2} is much lower than the rate required to explain the observed abundance of \ce{H2} in the ISM \parencite{Gould1963,Hollenbach1971}. In addition to chemical reactions, dust grains also play a role in the sublimation and freeze-out of molecules, leading to “jumps” or “drops” in molecular profiles at specific temperatures \parencite{Herbst2009}.
 
 \begin{figure}[hb]
@@ -407,7 +404,7 @@ To summarize the model comparisons in this section, I will use the constant pres
 
 To model the curvature of the cloud, I treat the PDR region as the outermost shell of a fictitious spherical cloud, assuming plane-parallel geometry, as shown in Fig.~\ref{fig:geometry}. This approximation is valid when the curvature radius of the cloud's surface is relatively small compared to the radius of the cloud. For the models in this study, the physical depth of the PDR region is approximately $\qty{0.08}{pc}$, which is significantly smaller than the curvature radius, as seen in Fig.~\ref{fig:obsimg}, thereby justifying the use of plane-parallel geometry. Under this assumption, I consider all physical variables at a given distance from the cloud's surface to be equal to those computed by the \mdpdr{} model at the same distance from the cloud's edge.
 
-The radius $R$ of the fictitious spherical cloud is provided as an input parameter to the wrapper code. A line of sight (LoS) is defined by its impact parameter $b$, which measures the perpendicular distance from the LoS to the center of the cloud. From the output of the \mdpdr{}, the level number densities $n_X(d)$ are obtained as a function of the depth $d$ into the cloud. In plane-parallel geometry, $n_X(d)$ gives the number density at a point located at a depth $d$ from the spherical surface. 
+The radius $R$ of the fictitious spherical cloud is provided as an input parameter to the wrapper code. A LoS is defined by its impact parameter $b$, which measures the perpendicular distance from the LoS to the center of the cloud. From the output of the \mdpdr{}, the level number densities $n_X(d)$ are obtained as a function of the depth $d$ into the cloud. In plane-parallel geometry, $n_X(d)$ gives the number density at a point located at a depth $d$ from the spherical surface. 
 
 The column density along a given LoS is determined by interpolating the number density at each depth d and then integrating along the LoS. To do this, I first compute the range of distances inside the PDR region along the LoS. The maximum half-distance $s_{\max}$ is given by:
 \begin{equation}
@@ -500,8 +497,8 @@ Fig.~\ref{fig:convolution} \qt{or Fig.~\ref{fig:convolution_nosurfchem}?} illust
     \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green), with a zoomed-in view of the area within the dashed rectangle. The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution}
 \end{figure}
 
-\section{Results and Discussion}
-\subsection{Convolved Column Densities from Spherical Geometry Model}
+\section{Results and Discussion} \label{sec:results}
+\subsection{Convolved Column Densities from Spherical Model} \label{sec:convcolden}
 
 \begin{figure}
     \centering
@@ -528,7 +525,7 @@ The convolved profiles provide a closer match to the observed data, as shown in 
     \caption{Comparison of column density profiles for a model with spherical geometry ($R_\mr{cloud} = \qty{5}{pc}$, solid lines) and observations (dashed lines). The unconvolved profiles (dotted lines) are also shown for comparison.} \label{fig:colden_Rcloud5pc}
 \end{figure}
 
-\subsection{Effect of Cloud Radius on Column Densities}
+\subsection{Effect of Cloud Radius on Column Densities} \label{sec:comprad}
 
 There are no significant changes to the rising side of the profiles or the locations of the peaks with varying cloud radius $R_\mr{cloud}$. Instead, variations in $R_\mr{cloud}$ primarily affect the shape of the profile's tail (Fig.~\ref{fig:comprad}). As the cloud radius increases, the surface curvature decreases, making the emitting region more tangent to the LoS at the same depth from the cloud's surface. This reduces the passage length and, consequently, causes the tail to decline more steeply.
 
@@ -540,7 +537,7 @@ None of the models reproduce the observed profiles accurately. A direct comparis
     \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = $ \qty{0.5}{pc} (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). Observations are shown as dotted lines. A schematic representation of the cloud radii is included in the bottom right corner. The areas marked by black rectangles are shown with greater detail in zoomed-in views.} \label{fig:comprad}
 \end{figure}
 
-\subsection{Line Profiles with Radiative Transfer}
+\subsection{Line Profiles with Radiative Transfer} \label{sec:comprte}
 
 To validate the solver, we test it by solving the radiative transfer equation with constant density profiles for both the lower and upper levels. In this case, the radiative transfer equation simplifies to:
 \begin{equation}
@@ -560,7 +557,7 @@ For this toy problem, we solve the radiative transfer equation for the \ce{CO} t
 
 Due to time constraints, I was unable to fully implement the method discussed in Sec.~\ref{sec:rte}. Specifically, my results are limited to solving the radiative transfer equation at the line center, without taking into account the line-broadening profile, $\phi(\nu)$. Despite this limitation, the implemented methods illustrate how solving the radiative transfer equation along the LoS affects the shape of the profiles. Future work could build on these results by incorporating the full line-broadening profile and comparing the results with observed data.
 
-\section{Conclusions}
+\section{Conclusions} \label{sec:conclusion}
 
 
 \newpage
