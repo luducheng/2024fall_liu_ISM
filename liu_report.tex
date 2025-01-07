@@ -167,7 +167,23 @@
 \restoregeometry
 \normalsize
 
-\newpage
+\clearpage
+\thispagestyle{empty}
+\begin{abstract}
+\normalsize
+
+The interstellar medium (ISM), composed of gas and dust between stars in galaxies, plays a critical role in star formation and galactic evolution. Interactions between the ISM and massive stars or star clusters shape its physical and chemical properties. One key region where these processes take place is the photodissociation region (PDR), where far-ultraviolet radiation dominates the chemical or heating processes. PDRs are the primary sources of infrared line and continuum radiation in galaxies, which are essential for probing PDR properties. PDR models have been instrumental in interpreting observational data; however, they have limitations, such as the use of one-dimensional slab geometry. This project develops a wrapper for the \mdpdr{} to compute column densities in spherical geometry and convolve them with instrument resolution, offering a more accurate model of line emission. Additionally, preliminary work on solving radiative transfer along the line of sight in spherical geometry is presented. These modifications improve the alignment between model and observed line profiles in the Horsehead Nebula, both in shape and extent. While the solution for radiative transfer in spherical geometry is still under development, further improvements in profile modeling are anticipated. This work will enhance the interpretation of observational data and the determination of physical parameters from PDR models.
+
+\end{abstract}
+
+\begin{abstract}
+\normalsize
+
+Le milieu interstellaire (ISM), composé de gaz et de poussières entre les étoiles des galaxies, joue un rôle essentiel dans la formation des étoiles et l'évolution des galaxies. Les interactions entre le ISM et les étoiles massives ou les amas d'étoiles façonnent ses propriétés physiques et chimiques. Une région clé où ces processus ont lieu est la région de photodissociation (PDR), où le rayonnement ultraviolet lointain domine les processus chimiques ou de chauffage. Les régions de photodissociation sont les principales sources de raies infrarouges et de rayonnement continu dans les galaxies, ce qui est essentiel pour sonder les propriétés des régions de photodissociation. Les modèles PDR ont joué un rôle important dans l'interprétation des données d'observation; cependant, ils ont des limites, comme l'utilisation d'une géométrie de dalle unidimensionnelle. Ce projet développe un wrapper pour \mdpdr{} afin de calculer les densités de colonne dans une géométrie sphérique et de les convoluer avec la résolution de l'instrument, offrant un modèle plus précis de l'émission des raies. En outre, des travaux préliminaires sur la résolution du transfert radiatif le long de la ligne de visée en géométrie sphérique sont présentés. Ces modifications améliorent l'alignement entre le modèle et les profils de raies observés dans la nébuleuse de la tête de cheval, à la fois en termes de forme et d'étendue. Bien que la solution pour le transfert radiatif en géométrie sphérique soit encore en cours de développement, d'autres améliorations dans la modélisation des profils sont attendues. Ce travail améliorera l'interprétation des données d'observation et la détermination des paramètres physiques à partir des modèles PDR.
+
+\end{abstract}
+
+\clearpage
 \thispagestyle{empty}
 \vspace*{10em}
 {\hypersetup{hidelinks}\large
@@ -179,40 +195,14 @@
 \footnotetext{cover page image: \href{https://hubblesite.org/contents/media/images/2013/12/3166-Image.html?keyword=Horsehead}{Horsehead Nebula captured by the Hubble Space Telescope (HST) in 2013.} The image was created from Hubble data from proposal \href{http://archive.stsci.edu/proposal_search.php?mission=hst&id=12812}{12812}. Illustration Credit: \href{http://www.nasa.gov/}{NASA}, \href{http://www.spacetelescope.org/}{ESA}, and Z. Levay (\href{http://www.stsci.edu/}{STScI})}
 \endgroup
 
-\newpage
 \clearpage
-\pagenumbering{arabic} 
-\begin{abstract}
-\normalsize
-
-\textit{Context.} 
-
-\textit{Aim.} 
-
-\textit{Methods.} 
-
-\textit{Results.} 
-
-\end{abstract}
-
-\begin{abstract}
-\normalsize
-\textit{Contexte.} 
-
-\textit{Objectif.} 
-
-\textit{Méthodes.} 
-
-\textit{Résultats.}
-\end{abstract}
-
-\newpage
+\pagenumbering{arabic}
 \section{Introduction}
 
-The interstellar medium (ISM) is composed of gas and dust between stars in galaxies. The ISM is site of star formation and takes up around $\sim 10\%$ of total baryonic mass \parencite{Draine2011}. In return, the radiation field produced by stars is responsible for the heating the gas and dust that cool in bright line and continuum emission. These emission lines provide information about the physical conditions inside the ISM, such as the temperature, density and chemical composition.
+The interstellar medium (ISM) is composed of gas and dust between stars in galaxies, and it plays a critical role in star formation and galactic evolution, accounting for approximately $10\%$ of the total baryonic mass \parencite{Draine2011}. The ISM is a dynamic environment where interactions between gas, dust, and radiation shape its physical and chemical properties. Massive stars and star clusters can disturb adjacent molecular clouds through their strong stellar winds, ultraviolet (UV) radiation, and, at times, transient events like supernovae. This influence extends across various regions, from the diffuse edges of molecular clouds to their cold, dense cores. One such key region where these processes take place is the photodissociation region (PDR), which forms at the interface between molecular clouds and sources of UV radiation.
 
 \subsection{Photodissociation Regions (PDRs)}
-Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemical or heating processes\parencite{Tielens1985}. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the interstellar medium (ISM) and molecular layers where FUV radiation drives molecule formation.
+Photodissociation regions (PDRs) are regions where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemical or heating processes \parencite{Tielens1985}. A PDR begins at the ionization front (IF), where photons with energies above the Lyman limit (\qty{13.6}{eV}) are fully absorbed, preventing further ionization of hydrogen. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the ISM and molecular layers where FUV radiation drives molecule formation.
 
 \begin{figure}[hb]
     \centering
@@ -300,7 +290,7 @@ The observational data used in this study (Fig.~\ref{fig:observation}) were obta
 % caveats? PDR annual review section 5.5
 A significant heterogeneity exists among the available PDR models, which differ in their geometry, physical and chemical structures, and model parameters. \textcite{Röllig2007} suggest that the choice of a spedific code should depend on the physical and chemical processes implemented in the code, as well as the characteristics of the emission source. 
 
-In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonzalez2008,LeBourlot2012,Bron_thesis,Bron2014,Bron2016} to simulate the Horsehead Nebula. The \mdpdr{} models a stationary one-dimensional (1D) slab of gas and dust illuminated by an ultraviolet (UV) radiation field from one or both sides (Fig.~\ref{fig:1Dgeometry}). At each iteration, the code solves the UV radiative transfer in both the continuum and lines, followed by the chemical balance, and finally the level populations and thermal balance. The code outputs the level populations, the gas temperature, and the chemical abundances as a function of the depth into the cloud, with optional output of the radiation field. The physical parameters used to model the Horsehead PDR are summarized in Table~\ref{tab:params}.
+In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonzalez2008,LeBourlot2012,Bron_thesis,Bron2014,Bron2016} to simulate the Horsehead Nebula. The \mdpdr{} models a stationary one-dimensional (1D) slab of gas and dust illuminated by an UV radiation field from one or both sides (Fig.~\ref{fig:1Dgeometry}). At each iteration, the code solves the UV radiative transfer in both the continuum and lines, followed by the chemical balance, and finally the level populations and thermal balance. The code outputs the level populations, the gas temperature, and the chemical abundances as a function of the depth into the cloud, with optional output of the radiation field. The physical parameters used to model the Horsehead PDR are summarized in Table~\ref{tab:params}.
 
 \begin{table}[h!]
     \centering
@@ -316,11 +306,11 @@ In this project, I used the \mdpdr{} \parencite{LePetit2006,Goicoechea2007,Gonza
         & exact \ce{H2} self- and mutual shielding\footnotemark[6] \\
         Turbulent velocity dispersion & \qty{2}{\km\per\second}\footnotemark[7] \\
         Extinction Curve & HD38087\footnotemark[8]\\
-        $R_V = A_V / E(B-V)$ & $5.50$ \\
-        $C_D = N_H / E(B-V)$ & $1.57\times 10^{22}$\\
+        $R_V = A_V / E(B-V)$\footnotemark[9] & $5.50$ \\
+        $C_D = N_H / E(B-V)$\footnotemark[9] & $1.57\times 10^{22}$\\
         \bottomrule
     \end{tabular}
-    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, $A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})$.  \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models(see Sec.~\ref{sec:cstnp}). \textsuperscript{3}\textcite{Mathis1983}. \textsuperscript{4}Perpendicular on observer side, isotropic on back side. \textsuperscript{5}In Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6} See Sec.~\ref{sec:exactrt}. \textsuperscript{7}Only used in Doppler line broadening. \textsuperscript{8}\textcite{Fitzpatrick1990}. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mintinline{latex}{MeudonPDR}} documentation.} \label{tab:params}
+    \caption{Key physical parameters used to model the Horsehead PDR in the \mdpdr{}.\textsuperscript{1}Visual extinction, \(A_V \equiv 2.5\log_{10}(I_\mr{V}^0/I_\mr{V}^\mr{obs})\). \textsuperscript{2}Proton density is used in constant density models, and pressure is used in constant pressure models (see Sec.~\ref{sec:cstnp}). \textsuperscript{3}Radiation field shape from \textcite{Mathis1983}. \textsuperscript{4}ISRF geometry: beam perpendicular on the observer side, isotropic on the back side. \textsuperscript{5}ISRF scaling factors are in Habing units, as defined in \textcite{LePetit2006}. \textsuperscript{6}UV radiative transfer methods include the FGK approximation or exact \ce{H2} shielding (see Sec.\ref{sec:exactrt}). \textsuperscript{7}Turbulent velocity dispersion is relevant only for Doppler line broadening. \textsuperscript{8}Extinction curve from \textcite{Fitzpatrick1990}. \textsuperscript{9}Parameters related to extinction. Other parameters use default values. More descriptions can be found in the \href{https://ism.obspm.fr/files/PDRDocumentation/PDRDoc7.pdf}{\mintinline{latex}{MeudonPDR}} documentation.} \label{tab:params}
 \end{table}
 
 \begin{figure}
@@ -458,7 +448,7 @@ The line profile is normalized so that $\int_0^{\infty} \phi(\nu) \dd{\nu} = 1$.
 
 To solve the radiative transfer equation, I also need a background intensity $I_0$. For this, I use the isotropic specific intensity on the observer side, as provided by the \mdpdr{} in the file \mintinline{python}{_IncRadField.dat}. It is important to note that the current implementation is valid only for isotropic radiation; handling more general forms of background specific intensity would require additional modifications. \qt{add explanation why?}
 
-The external radiation field in the \mintinline{python}{IncRadField.dat} file is provided in units of \unit{erg\per\centi\meter\squared\per\second\per\steradian\per\angstrom}. However, to solve the radiative transfer equation, I need the specific intensity in units of \unit{erg\per\centi\meter\squared\per\second\per\steradian\per\Hz}. By energy conservation, $I_\nu |\dd{\nu}| = I_\lambda |\dd{\lambda}|$, and using $c = \lambda\nu$, I can derive the differential relation $\dd{\lambda} = -c/\nu^2 \dd{\nu}$. This allows me to convert between the two sets of units as follows:
+The external radiation field in the \mintinline{python}{IncRadField.dat} file is provided in units of \unit{erg\per\centi\meter\squared\per\second\per\steradian\per\AA}. However, to solve the radiative transfer equation, I need the specific intensity in units of \unit{erg\per\centi\meter\squared\per\second\per\steradian\per\Hz}. By energy conservation, $I_\nu |\dd{\nu}| = I_\lambda |\dd{\lambda}|$, and using $c = \lambda\nu$, I can derive the differential relation $\dd{\lambda} = -c/\nu^2 \dd{\nu}$. This allows me to convert between the two sets of units as follows:
 \begin{equation}
     I_\nu = I_\lambda \left|\frac{\dd{\lambda}}{\dd{\nu}}\right| = I_\lambda \frac{c}{\nu^2} = I_\lambda \frac{\lambda^2}{c}.
 \end{equation}
@@ -560,10 +550,10 @@ Due to time constraints, I was unable to fully implement the method discussed in
 \section{Conclusions} \label{sec:conclusion}
 
 
-\newpage
+\clearpage
 \printbibliography
 
-\newpage
+\clearpage
 \appendix
 \begin{figure}[h]
     \centering
