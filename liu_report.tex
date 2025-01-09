@@ -173,23 +173,24 @@
 \begin{abstract}
 \normalsize
 
-The interstellar medium (ISM), composed of gas and dust between stars in galaxies, plays a critical role in star formation and galactic evolution. Interactions between the ISM and massive stars or star clusters shape its physical and chemical properties. One key region where these processes take place is the photodissociation region (PDR), where far-ultraviolet radiation dominates the chemical and heating processes. PDRs are the primary sources of infrared line and continuum radiation in galaxies, which are essential for probing PDR properties. PDR models have been instrumental in interpreting observational data; however, they have limitations, such as the use of one-dimensional slab geometry. This project develops a wrapper for the \mdpdr{} to compute column densities in spherical geometry and convolve them with instrument resolution, offering a more accurate model of line emission. Additionally, preliminary work on solving radiative transfer along the line of sight in spherical geometry is presented. These modifications improve the alignment between model and observed spatial profiles of emission lines along a cut in the Horsehead Nebula, both in shape and extent. The solution for radiative transfer in spherical geometry is still under development, and further improvements in profile modeling are anticipated. This work will enhance the interpretation of observational data and the determination of physical parameters from PDR models.
+The interstellar medium (ISM), composed of gas and dust between stars in galaxies, plays a critical role in star formation and galactic evolution. Interactions between the ISM and massive stars or star clusters shape its physical and chemical properties. One key region where these processes take place is the photodissociation region (PDR), where far-ultraviolet radiation dominates the chemical and heating processes. PDRs are the primary sources of infrared line and continuum radiation in galaxies, which are essential for probing PDR properties. PDR models have been instrumental in interpreting observational data; however, they have limitations, such as the use of one-dimensional slab geometry. This project develops a wrapper for the \mdpdr{} to compute column densities in spherical geometry and convolve them with instrument resolution, offering a more accurate model of line emission. These modifications improve the alignment between model and observed spatial profiles of emission lines along a cut in the Horsehead Nebula, both in shape and extent. Additionally, preliminary work on solving radiative transfer along the line of sight in spherical geometry is presented. The solution for radiative transfer in spherical geometry is still under development, and further improvements in profile modeling are anticipated. This work will enhance the interpretation of observational data and the determination of physical parameters from PDR models.
 
 \end{abstract}
 
 \begin{abstract}
 \normalsize
 
-Le milieu interstellaire (MIS), composé de gaz et de poussières entre les étoiles des galaxies, joue un rôle essentiel dans la formation des étoiles et l'évolution des galaxies. Les interactions entre le MIS et les étoiles massives ou les amas d'étoiles façonnent ses propriétés physiques et chimiques. Une région clé où ces processus ont lieu est la région de photodissociation (PDR), où le rayonnement ultraviolet lointain domine les processus chimiques et de chauffage. Les régions de photodissociation sont les principales sources de raies et de rayonnement continu dans le domaine infrarouge des galaxies, ce qui est essentiel pour sonder les propriétés des régions de photodissociation. Les modèles PDR ont joué un rôle important dans l'interprétation des données d'observation; cependant, ils ont des limites, comme l'utilisation d'une géométrie unidimensionnelle. Ce projet développe un wrapper pour le code \mintinline{python}{MeudonPDR} afin de calculer les densités de colonne en géométrie sphérique et de les convoluer avec la résolution de l'instrument, offrant un modèle plus précis des profils spatiaux d'émission des raies. En outre, des travaux préliminaires sur la résolution du transfert radiatif le long de la ligne de visée en géométrie sphérique sont présentés. Ces modifications améliorent l'alignement entre le modèle et les profils spatiaux de raies le long d'une coupe dans la nébuleuse de la Tête de Cheval, à la fois en termes de forme et d'étendue. La solution pour le transfert radiatif en géométrie sphérique est encore en cours de développement, et d'autres améliorations dans la modélisation des profils sont attendues. Ce travail améliorera l'interprétation des données d'observation et la détermination des paramètres physiques à partir des modèles PDR.
+Le milieu interstellaire (MIS), composé de gaz et de poussières entre les étoiles des galaxies, joue un rôle essentiel dans la formation des étoiles et l'évolution des galaxies. Les interactions entre le MIS et les étoiles massives ou les amas d'étoiles façonnent ses propriétés physiques et chimiques. Une région clé où ces processus ont lieu est la région de photodissociation (PDR), où le rayonnement ultraviolet lointain domine les processus chimiques et de chauffage. Les régions de photodissociation sont les principales sources de raies et de rayonnement continu dans le domaine infrarouge des galaxies, ce qui est essentiel pour sonder les propriétés des régions de photodissociation. Les modèles PDR ont joué un rôle important dans l'interprétation des données d'observation; cependant, ils ont des limites, comme l'utilisation d'une géométrie unidimensionnelle. Ce projet développe un wrapper pour le code \mintinline{python}{MeudonPDR} afin de calculer les densités de colonne en géométrie sphérique et de les convoluer avec la résolution de l'instrument, offrant un modèle plus précis des profils spatiaux d'émission des raies. Ces modifications améliorent l'alignement entre le modèle et les profils spatiaux de raies le long d'une coupe dans la nébuleuse de la Tête de Cheval, à la fois en termes de forme et d'étendue. En outre, des travaux préliminaires sur la résolution du transfert radiatif le long de la ligne de visée en géométrie sphérique sont présentés. La solution pour le transfert radiatif en géométrie sphérique est encore en cours de développement, et d'autres améliorations dans la modélisation des profils sont attendues. Ce travail améliorera l'interprétation des données d'observation et la détermination des paramètres physiques à partir des modèles PDR.
 
 \end{abstract}
 
 \clearpage
 \thispagestyle{empty}
-\vspace*{10em}
+\vspace*{\fill}
 {\hypersetup{hidelinks}\large
 \tableofcontents
 }
+\vspace*{\fill}
 
 \begingroup
 \renewcommand{\thefootnote}{}
@@ -203,7 +204,7 @@ Le milieu interstellaire (MIS), composé de gaz et de poussières entre les éto
 The interstellar medium (ISM), composed of gas and dust between stars in galaxies, plays a critical role in star formation and galactic evolution, constituting approximately $10\%$ of the total baryonic mass \parencite{Draine2011}. The ISM is a dynamic environment where radiation, cosmic rays, magnectic fields, and turbulence interact with gas and dust, shaping its physical and chemical properties. It is the main site of star formation and serves as a matter reservoir for this process. In turn, massive stars and star clusters can disturb nearby molecular clouds through their strong stellar winds, ultraviolet (UV) radiation, and, at times, transient events like supernovae. This influence extends across various regions, from the diffuse edges of molecular clouds to their cold, dense cores. One such key region where these processes take place is the photodissociation region (PDR), which forms at the interface between molecular clouds and sources of UV radiation. 
 
 \subsection{Photodissociation Regions (PDRs)}
-Photodissociation regions (PDRs) are regions of neutral gas where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemical and heating processes \parencite{Tielens1985}. A PDR begins at the ionization front (IF), where photons with energies above the Lyman limit (\qty{13.6}{eV}) are fully absorbed, preventing further ionization of hydrogen. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the ISM and molecular layers where FUV radiation drives molecule formation.
+Photodissociation regions (PDRs) are regions of neutral gas in the ISM where far-ultraviolet (FUV; $\qty{6}{eV} < h\nu < \qty{13.6}{eV}$) radiation dominates the chemical and heating processes \parencite{Tielens1985}. A PDR begins at the ionization front (IF), where photons with energies above the Lyman limit (\qty{13.6}{eV}) are fully absorbed, preventing further ionization of hydrogen. PDRs span a wide range of incident FUV fluxes and densities, including all neutral gas in the ISM and molecular layers where FUV radiation drives molecule formation.
 
 \begin{figure}[hb]
     \centering
@@ -282,8 +283,8 @@ The observational data used in this study (Fig.~\ref{fig:observation}) were obta
         \ce{H2O}            & \ce{H2O}  & J=1, Ka=1, Kc=0 & J=1, Ka=0, Kc=1 & 557.30 \\
         \ce{C[II]}          & \ce{C+}   & 2P J=3/2 & 2P J=1/2 & 1902.59 \\
         \ce{C[I]}           & \ce{C}    & 3P J=1 & 3P J=0 & 492.02 \\
-        \ce{^{12}CO} (2-1)  & \ce{CO}   & v=0, J=2 & v=0, J=1 & 230.538 \\
-        \ce{^{12}CO} (4-3)  & \ce{CO}   & v=0, J=4 & v=0, J=3 & 461.041 \\
+        \ce{CO} (2-1)       & \ce{CO}   & v=0, J=2 & v=0, J=1 & 230.538 \\
+        \ce{CO} (4-3)       & \ce{CO}   & v=0, J=4 & v=0, J=3 & 461.041 \\
         % \ce{^{13}CO} (2-1)  & \ce{^{13}CO} & v=0, J=2 & v=0, J=1 & 220.399 \\
         \ce{C^{18}O} (2-1)  & \ce{C^{18}O} & v=0, J=2 & v=0, J=1 & 219.560 \\
         \midrule
@@ -579,8 +580,18 @@ Due to time constraints, I was unable to fully implement the method discussed in
 
 \section{Conclusions} \label{sec:conclusion}
 
+This project developed a wrapper for the \mdpdr{} to compute column densities in spherical geometry and convolve them with the instrumental resolution. The wrapper transforms the output of \mdpdr{}, a 1D slab geometry PDR model, into spherical geometry. Column densities along a given line of sight are derived by interpolating the number densities at various depths and integrating along the line of sight. These column densities are then convolved with the instrumental resolution to account for the effects of the instrument on the observed spatial profiles. 
+
+The convolved column density profiles were compared with observational data of several emission lines along a cut through the Horsehead Nebula. The results show that spherical geometry significantly alters the column density profiles compared to slab geometry, producing more extended profiles with peaks shifted to greater depths within the cloud. Convolution with the instrumental resolution further smooths and extends these profiles, improving their agreement with observed data, particularly in terms of shape and extent. While the peak widths align well with the observations, some discrepancies remain. Specifically, the models fail to capture the shift between \ce{C+/C} and the earlier peak of \ce{H2O}.
+
+The effects of varying the cloud radius on the column density profiles are minimal, primarily influencing the shape of the spatial profile's tail, with little impact on the rising sides or peak locations. As such, adjusting the cloud radius alone cannot resolve the discrepancies.
+
+Preliminary work on solving the radiative transfer equation along the line of sight in spherical geometry is also presented. The comparison between the solution based on \mdpdr{} output and observational data is still ongoing, and further improvements in profile modeling are anticipated with this development.
+
+This work establishes a method for interpreting observational data and determining physical parameters of edge-on PDR observations using models. Future work will focus on refining the radiative transfer treatment and incorporating full line-broadening profiles to further enhance model-observation consistency.
 
 \clearpage
+\addcontentsline{toc}{section}{References}
 \printbibliography
 
 \clearpage
@@ -590,11 +601,19 @@ Due to time constraints, I was unable to fully implement the method discussed in
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=.88\textwidth,keepaspectratio]{convolution_nosurfchem.pdf}
-    \caption{Illustration of the Convolution Process. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
+    
+    \includegraphics[width=.88\textwidth,keepaspectratio]{convolution.pdf}
+    \caption{Illustration of the convolution process using the model with surface chemistry. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
 
     \vspace{2em}
 
+    \includegraphics[width=.88\textwidth,keepaspectratio]{convolution_nosurfchem.pdf}
+    \caption{Illustration of the convolution process using the model without surface chemistry. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
+
+\end{figure}
+
+\begin{figure}
+    \centering
     \includegraphics[width=\textwidth,keepaspectratio]{comp_curvature_obs_shape.pdf}
     \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = \qty{0.5}{pc}$ (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). The profiles are shifted to align with the peak locations in the observational data (dotted lines), with the corresponding shifts for each model indicated in the legend.} \label{fig:comprad_shape}
 \end{figure}
