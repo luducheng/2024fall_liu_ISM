@@ -341,7 +341,7 @@ The density structure of a PDR model, whether it assumes constant density, const
 % - The temperature in the atomic region is also much higher in the atomic region for the constant density model, also because of the higher density.
 % - in physical distance, the constant pressure model has a much more extended atomic region (because high temperature, so low density) and a much more compressed molecular region (because low temperature, so high density). 
 
-The PDR structure as a function of $A_V$ in the constant density and constant pressure models differs most in the behavior of carbon and water near the \ce{H/H2} transition (Fig.~\ref{fig:cmp_cstp_cstn}), due to the much higher density in the constant density model. Additionally, the temperature in the atomic region is higher in the constant density model than in the constant pressure model. This occurs because, in the constant density model, the surface layer is much denser and absorbs UV radiation more efficiently. In contrast, in the constant pressure model (fixed $P = nkT$), the density increases gradually from the surface to deeper regions as the temperature decreases. Consequently, in physical distance (Fig.~\ref{fig:cmp_cstp_cstn_arcsec}), the constant pressure model has a more extended atomic region and a more compressed molecular region.
+The PDR structure as a function of $A_V$ in the constant density and constant pressure models differs most in the behavior of carbon and water near the \ce{H/H2} transition (Fig.~\ref{fig:cmp_cstp_cstn}), due to the much higher density in the constant density model. Additionally, the temperature in the atomic region is higher in the constant density model than in the constant pressure model. This occurs because, in the constant density model, the surface layer is much denser and absorbs UV radiation more efficiently. In contrast, in the constant pressure model (fixed $P = nkT$), the density increases gradually from the surface to deeper regions as the temperature decreases. Consequently, in physical distance (Fig.~\ref{fig:cmp_cstp_cstn_arcsec}), the constant pressure model has a more extended atomic region and a more compressed molecular region. Additional comparisons between various constant density models and constant pressure models are provided in the appendix.
 
 Observations of the Horsehead Nebula reveal a steep density gradient in the PDR \parencite{Habart2005,Guzmán2011}. \textcite{HernándezVera2023} showed that constant density models fail to reproduce the observed structures, and neither do previously proposed density profile prescriptions. Furthermore, recent observations from ALMA and Herschel indicate that the warm layer of PDRs is indeed isobaric, with relatively high thermal pressures \parencite{Marconi1998,Goicoechea2016,Joblin2018,Wu2018,Bron2018,Maillard2021}. Based on these findings, I adopt a constant pressure model with $P = \qty{5e6}{K\,cm^{-3}}$ for the subsequent analysis.
 
@@ -372,7 +372,9 @@ There are two options available in the \mdpdr{} for treating radiative transfer 
 
 The second, more accurate approach is to solve the radiative transfer exactly, i.e., on a wavelength grid fine enough to resolve the multiple UV absorption lines of important species such as \ce{H}, \ce{H2}, and \ce{CO}. This method explicitly includes mutual shielding for absorption lines corresponding to a given number of energy levels of \ce{H}, \ce{H2}, \ce{D}, \ce{HD}, \ce{CO}, \ce{^{13}CO}, and \ce{C^{18}O}, as detailed in \textcite{Goicoechea2007, Gonzalez2008}. For higher energy levels, the FGK approximation is retained, as their contributions are negligible due to their low populations.
 
-Fig.~\ref{fig:cmpH2rtspectra} compares spectra from $1074~\text{\AA}$ to $1080~\text{\AA}$ at various visual extinction values for models computed using the FGK approximation and the exact radiative transfer method, demonstrating pronounced attenuation when applying the exact method of \ce{H2} radiative transfer. Although computationally more intensive, the exact method enables a more accurate treatment of the UV radiation field, which subsequently influences the PDR structure. For instance, the exact method leads to increased attenuation of the radiation field, shifting the \ce{H}/\ce{H2} transition layer to lower extinction depths \parencite{Goicoechea2007}, as illustrated in Fig.~\ref{fig:cmpH2rt}. Furthermore, the enhanced attenuation from mutual shielding results in a lower temperature profile. To balance accuracy and computational efficiency, my model applies exact radiative transfer only to the 20 lowest energy levels of \ce{H2}, which are the primary contributors to the attenuation. \qt{how to explain the second bump occuring in the both cases?}
+Fig.~\ref{fig:cmpH2rtspectra} compares spectra from $1074~\text{\AA}$ to $1080~\text{\AA}$ at various visual extinction values for models computed using the FGK approximation and the exact radiative transfer method, demonstrating pronounced attenuation when the exact radiative transfer of \ce{H2} in included. In the spectrum computed using the FGK approximation, the \ce{H2} lines appear absent in the FGK approximation because they are treated independently of the wavelength-dependent spectrum. However, Fig.~\ref{fig:cmpH2rtspectra} clearly shows that some \ce{H2} lines strongly overlap, an effect that eludes the FGK approximation.
+
+This highlights the advantage of the exact radiative transfer method, which, although computationally more intensive, provides a more detailed treatment of the UV radiation field, thereby influencing the PDR structure. For instance, the exact method leads to increased attenuation of the radiation field, shifting the \ce{H}/\ce{H2} transition layer to lower extinction depths \parencite{Goicoechea2007}, as illustrated in Fig.~\ref{fig:cmpH2rt}. Furthermore, the enhanced attenuation from mutual shielding results in a lower temperature profile. To balance accuracy and computational efficiency, my model applies exact radiative transfer only to the 20 lowest energy levels of \ce{H2}, which are the primary contributors to the attenuation. 
 
 \begin{figure}[ht]
     \centering
@@ -501,9 +503,8 @@ The convolution of the line profile, $f(x)$, with the normalized PSF is performe
 \begin{equation}
     (f * g) (x) = \frac{1}{K} \sum_{\tau = x_{\min} - 3\sigma}^{x_{\max} + 3\sigma}F(\tau)g(x - \tau)\Delta x,
 \end{equation}
-where $x_{\min}$ and $x_{\max}$ define the bounds of the spatial grid, and $F(\tau)$ is the value of the line profile at point $\tau$. 
+where $x_{\min}$ and $x_{\max}$ define the bounds of the spatial grid, and $F(\tau)$ is the value of the line profile at point $\tau$. Illustrations of the effects of convolution on line profiles can be found in Figs.~\ref{fig:convolution_surfchem} and \ref{fig:convolution_nosurfchem} in the appendix. With increasing FWHM, the convolved profiles become progressively smoother; the peak intensity decreases, and the signal is redistributed over a broader spatial range.
 
-\qt{figure on convolution?}
 % Fig.~\ref{fig:convolution} \qt{or Fig.~\ref{fig:convolution_nosurfchem}?} illustrates how convolution alters the line profile. The convolved profiles demonstrate how increasing the FWHM progressively smooths the line profile, reducing peak intensity and redistributing the signal over a broader spatial range.
 
 % \begin{figure}[h]
@@ -523,8 +524,8 @@ where $x_{\min}$ and $x_{\max}$ define the bounds of the spatial grid, and $F(\t
 
 \begin{figure}
     \centering
-    \includegraphics[width=\textwidth,keepaspectratio]{column_densities.pdf}
-    \caption{Comparison of normalized column density profiles for slab geometry (dashed lines) and spherical geometry (solid lines) with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$. In Panel 1, $N(\ce{C^+}\ \text{2P, J=3/2})$ (blue) and $N(\ce{C}\ \text{3P, J=1})$ (orange) are shown; in Panel 2, $N(\ce{CO}\ \text{v=0, J=2})$ (green) and $N(\ce{CO}\ \text{v=0, J=4})$ (red); and in Panel 3, $N(\ce{H2O}\ \text{J=1, ka=1, kc=0})$ (purple). The dashed gray lines indicate the maximum depth of the PDR model, $d_\mr{PDR}$. The rectangle marks the zoomed-in region in Panel 2.} \label{fig:colden}  
+    \includegraphics[width=\textwidth,keepaspectratio]{column_densities.pdf} 
+    \caption{Comparison of normalized column density profiles for slab geometry (dashed lines) and spherical geometry (solid lines) with a cloud radius \( R_\mr{cloud} = \qty{5}{pc} \). Panel 1: \( N(\ce{C^+}\ \text{2P, J=3/2}) \) (blue) and \( N(\ce{C}\ \text{3P, J=1}) \) (orange). Panel 2: \( N(\ce{CO}\ \text{v=0, J=2}) \) (green) and \( N(\ce{CO}\ \text{v=0, J=4}) \) (red). Panel 3: \( N(\ce{H2O}\ \text{J=1, ka=1, kc=0}) \) (purple). Dashed gray lines indicate the maximum depth of the PDR model,  $d_\mr{PDR}$. The rectangle marks the zoomed-in region in Panel 2.} \label{fig:colden}  
 \end{figure}
 
 In Secs.~\ref{sec:sphere} and \ref{sec:convolution}, I described the modeling of spherical geometry using the wrapper for the \mdpdr{} and the convolution of line profiles with the instrumental resolution. In this section, I present the convolved column density profiles for the spherical geometry model with a cloud radius of $R_\mr{cloud} = \qty{5}{pc}$. Comparisons are made first between the spherical and slab geometry models, then between the unconvolved and convolved profiles, and finally between the convolved profiles and the observational data.
@@ -576,7 +577,13 @@ For this toy problem, I solve the radiative transfer equation for the \ce{CO} tr
     \caption{Comparison of the computed (blue solid lines) and analytical (orange dashed lines) solutions to the radiative transfer equation for the \ce{CO} transition from \(v = 0\), \(J = 2\) to \(v = 0\), \(J = 1\) along LoS with different impact parameters in a \(\qty{5}{pc}\) cloud. The right axes show the relative error of the numerical solution, defined as $|I_\nu^\text{num} - I_\nu^\text{ana}|/I_\nu^\text{ana}$.} \label{fig:rtecstn}
 \end{figure}
 
-Due to time constraints, I was unable to fully implement the method discussed in Sec.~\ref{sec:rte}. Specifically, my results are limited to solving the radiative transfer equation at the line center, without taking into account the line-broadening profile, $\phi(\nu)$. Despite this limitation, the implemented methods illustrate how solving the radiative transfer equation along the LoS affects the shape of the profiles. Future work could build on these results by incorporating the full line-broadening profile and comparing the results with observed data.
+Due to time constraints, I was unable to fully implement the method discussed in Sec.~\ref{sec:rte}. Specifically, my results are limited to solving the radiative transfer equation at the line center, without taking into account the line-broadening profile, $\phi(\nu)$. The preliminary results for the line centers are presented in Fig.~\ref{fig:rtecomp} in the appendix. Despite this limitation, the implemented methods illustrate how solving the radiative transfer equation along the LoS affects the shape of the profiles. Future work could build on these results by incorporating the full line-broadening profile and comparing the results with observed data.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\textwidth,keepaspectratio]{rte_comparison.pdf}
+%     \caption{Solution of the radiative transfer equation along LoS with different impact parameters for several lines.} \label{fig:rtecomp}
+% \end{figure}
 
 \section{Conclusions} \label{sec:conclusion}
 
@@ -599,11 +606,34 @@ This work establishes a method for interpreting observational data and determini
 \section*{Supplementary Material}
 \addcontentsline{toc}{section}{Supplementary Material}
 
-\begin{figure}[h]
+\subsection*{Comparisons between Constant Pressure and Constant Density Models}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.48\textwidth]{struct_nH3e6.pdf}
+    \includegraphics[width=.48\textwidth]{struct_nH3e6_arcsec.pdf}
+    \caption{Similar to Figs.~\ref{fig:cmp_cstp_cstn} (left) and \ref{fig:cmp_cstp_cstn_arcsec} (right), for the model with constant density $n_H = \qty{3e6}{cm^{-3}}$.} \label{fig:struct_nH3e6}
+
+    \vspace{2em}
+
+    \includegraphics[width=.48\textwidth]{struct_P1e6.pdf}
+    \includegraphics[width=.48\textwidth]{struct_P1e6_arcsec.pdf}
+    \caption{Similar to Figs.~\ref{fig:cmp_cstp_cstn} (left) and \ref{fig:cmp_cstp_cstn_arcsec} (right), for the model with constant pressure $P = \qty{1e6}{K\,cm^{-3}}$.} \label{fig:struct_P1e6}
+
+    \vspace{2em}
+
+    \includegraphics[width=.48\textwidth]{struct_P1e7.pdf}
+    \includegraphics[width=.48\textwidth]{struct_P1e7_arcsec.pdf}
+    \caption{Similar to Figs.~\ref{fig:cmp_cstp_cstn} (left) and \ref{fig:cmp_cstp_cstn_arcsec} (right), for the model with constant pressure $P = \qty{1e7}{K\,cm^{-3}}$.} \label{fig:struct_P1e7}
+
+\end{figure}
+
+\clearpage
+\subsection*{Convolution}
+\begin{figure}[h!]
     \centering
     
     \includegraphics[width=.88\textwidth,keepaspectratio]{convolution.pdf}
-    \caption{Illustration of the convolution process using the model with surface chemistry. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_nosurfchem}
+    \caption{Illustration of the convolution process using the model with surface chemistry. The left panel shows the original line profile (blue) alongside the profiles convolved with Gaussian PSFs of resolutions $3''$ (orange) and $30''$ (green). The right panel shows the corresponding Gaussian PSFs, normalized and truncated at $3\sigma$.} \label{fig:convolution_surfchem}
 
     \vspace{2em}
 
@@ -612,10 +642,20 @@ This work establishes a method for interpreting observational data and determini
 
 \end{figure}
 
-\begin{figure}
+\clearpage
+\subsection*{The Effect of Cloud Radius on Column Densities}
+\begin{figure}[h!]
     \centering
     \includegraphics[width=\textwidth,keepaspectratio]{comp_curvature_obs_shape.pdf}
     \caption{Comparison of normalized line profiles for different cloud radii: $R_\mr{cloud} = \qty{0.5}{pc}$ (blue), \qty{1.0}{pc} (orange), \qty{3.0}{pc} (green), and \qty{5.0}{pc} (red). The profiles are shifted to align with the peak locations in the observational data (dotted lines), with the corresponding shifts for each model indicated in the legend.} \label{fig:comprad_shape}
+\end{figure}
+
+\clearpage
+\subsection*{Solving Radiative Transfer Equation Preliminary Results}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth,keepaspectratio]{rte_comparison.pdf}
+    \caption{Solution of the radiative transfer equation along LoS with different impact parameters for several lines.} \label{fig:rtecomp}
 \end{figure}
 
 \end{document}
