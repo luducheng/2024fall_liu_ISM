@@ -21,14 +21,8 @@
 
 % math support
 \usepackage{amsmath}
-\usepackage{amssymb,stackengine}
-\newcommand\varlesssim{\mathrel{\ensurestackMath{%
-  \stackengine{-.4ex}{<}{\rotatebox{-25}{$\sim$}}{U}{r}{F}{T}{S}}}}
-\newcommand\vargtrsim{\mathrel{\ensurestackMath{%
-  \stackengine{-.4ex}{>}{\rotatebox{25}{$\sim$}}{U}{l}{F}{T}{S}}}}
+\usepackage{amssymb}
 \usepackage{siunitx}
-\DeclareSIUnit{\erg}{erg}
-\DeclareSIUnit{\rate}{\erg \per \centi \metre \cubed \per \second}
 \usepackage[version=4]{mhchem}
 
 % for code display
@@ -52,7 +46,6 @@
 \newcommand{\pfird}[2][]{\frac{\partial#1}{\partial#2}} 
 \newcommand{\pfirdat}[3][1]{\left(\frac{\partial#1}{\partial#2}\right)_{\!\!\!#3}} 
 \newcommand{\dd}[1]{\mathrm{d}#1}
-
 \newcommand{\mdpdr}{\mintinline{latex}{MeudonPDR} code}
 % \newcommand{\qt}[1]{\textcolor{red}{#1}}
 \newcommand{\qt}[1]{}
@@ -212,7 +205,7 @@ Photodissociation regions (PDRs) are regions of neutral gas in the ISM where far
     \caption{Schematic of a photodissociation region as a function of visual extinction $A_V$. Reprinted from \textcite{Wolfire2022}, Fig.~2. Red text indicates the dominant heating mechanisms, with "P.E." referring to photoelectric effects and "C.R." referring to cosmic rays. Blue text represents the main line emissions, which are the main cooling mechanisms.} \label{fig:pdrscheme}
 \end{figure}
 
-PDRs are the primary sources of infrared (IR) line and continuum radiation in galaxies \parencite{Crawford1985,Stacey2010}. Grains absorb the majority of the FUV radiation and re-radiate it in the IR continuum, but a fraction of the FUV photons heat the gas through, which then cool through line emission. Together, the line and continuum emission provide important insights into the physical and chemical conditions in PDRs. The study of PDRs is vital for understanding star formation and galaxy evolution. Observations of PDRs help to constrain key physical parameters such as temperature, chemical composition, and radiative energy, probing the local environments of star-forming regions and the potential presence of stellar feedback.
+PDRs are the primary sources of infrared (IR) line and continuum radiation in galaxies \parencite{Crawford1985,Stacey2010}. Grains absorb the majority of the FUV radiation and re-radiate it in the IR continuum, but a fraction of the FUV photons heat the gas through photoelectric effect, which then cool through line emission. Together, the line and continuum emission provide important insights into the physical and chemical conditions in PDRs. The study of PDRs is vital for understanding star formation and galaxy evolution. Observations of PDRs help to constrain key physical parameters such as temperature, chemical composition, and radiative energy, probing the local environments of star-forming regions and the potential presence of stellar feedback.
 
 Fig.~\ref{fig:pdrscheme} shows a one-dimensional (1D) structure of PDR illuminated by radiation field from the left. The adjacent \ce{H_{II}} region absorbs extreme-ultraviolet (EUV; $h\nu > \qty{13.6}{eV}$) photons, leaving FUV photons that create the PDR. Atomic hydrogen, helium, and oxygen are neutral because their ionization potentials exceed \qty{13.6}{eV}, while molecules are photodissociated, and metals like carbon, silicon, and sulfur are singly ionized. The heating process is dominated by photoelectric effect on small grains and polycyclic aromatic hydrocarbons (PAHs), and the cooling process is dominated by fine-structure line emission. As the depth increases and FUV radiation diminishes, \ce{H2} forms, followed by \ce{CO}. Both \ce{H2} and \ce{CO} photodissociate via line absorption and can therefore self-shield, allowing them to form closer to the surface than other molecules like \ce{H2O} and its isotopologues, which dissociate via FUV continuum. In the deepest layers, cosmic rays dominate the heating process, and rotational transitions of \ce{CO} isotopologues become the primary coolants.
 
