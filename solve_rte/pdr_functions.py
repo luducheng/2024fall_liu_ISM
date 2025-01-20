@@ -6,7 +6,7 @@ import numpy as np
 import astropy.units as u
 import astropy.constants as const
 from scipy.interpolate import interp1d
-from scipy.integrate import quad
+from scipy.integrate import quad, solve_ivp
 from numba import jit
 
 def create_dict(filename):
