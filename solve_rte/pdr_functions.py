@@ -7,6 +7,7 @@ import astropy.units as u
 import astropy.constants as const
 from scipy.interpolate import interp1d
 from scipy.integrate import quad
+from numba import jit
 
 def create_dict(filename):
     """create the dictionary for refering quantities from the file used to extract data by IDAT
@@ -45,52 +46,52 @@ def create_dict(filename):
 #     "n(C_18O J=2)": 19
 # }
 
-##### observation data #####
-datafolder = "Darek_data/"
+# ##### observation data #####
+# datafolder = "Darek_data/"
 
-d12co_2_1, l12co_2_1 = np.loadtxt(datafolder+"horsehead-12co2-1-smo.area", unpack=True, dtype=float)
-indx_12co_2_1 = np.argwhere(l12co_2_1 > 0)
-# norm_12co_2_1 = 41.9
-norm_12co_2_1 = np.max(l12co_2_1[np.logical_and(l12co_2_1 > 0, d12co_2_1 < 250)])
+# d12co_2_1, l12co_2_1 = np.loadtxt(datafolder+"horsehead-12co2-1-smo.area", unpack=True, dtype=float)
+# indx_12co_2_1 = np.argwhere(l12co_2_1 > 0)
+# # norm_12co_2_1 = 41.9
+# norm_12co_2_1 = np.max(l12co_2_1[np.logical_and(l12co_2_1 > 0, d12co_2_1 < 250)])
 
-d12co_4_3, l12co_4_3 = np.loadtxt(datafolder+"horsehead-12co4-3-smo.area", unpack=True, dtype=float)
-indx_12co_4_3 = np.argwhere(l12co_4_3 > 0)
-norm_12co_4_3 = 31.64
-norm_12co_4_3 = np.max(l12co_4_3[np.logical_and(l12co_4_3 > 0, d12co_4_3 < 250)])
+# d12co_4_3, l12co_4_3 = np.loadtxt(datafolder+"horsehead-12co4-3-smo.area", unpack=True, dtype=float)
+# indx_12co_4_3 = np.argwhere(l12co_4_3 > 0)
+# norm_12co_4_3 = 31.64
+# norm_12co_4_3 = np.max(l12co_4_3[np.logical_and(l12co_4_3 > 0, d12co_4_3 < 250)])
 
-d13co_2_1, l13co_2_1 = np.loadtxt(datafolder+"horsehead-13co2-1-smo.area", unpack=True, dtype=float)
-indx_13co_2_1 = np.argwhere(l13co_2_1 > 0)
-norm_13co_2_1 = 17.2
-norm_13co_2_1 = np.max(l13co_2_1[np.logical_and(l13co_2_1 > 0, d13co_2_1 < 250)])
+# d13co_2_1, l13co_2_1 = np.loadtxt(datafolder+"horsehead-13co2-1-smo.area", unpack=True, dtype=float)
+# indx_13co_2_1 = np.argwhere(l13co_2_1 > 0)
+# norm_13co_2_1 = 17.2
+# norm_13co_2_1 = np.max(l13co_2_1[np.logical_and(l13co_2_1 > 0, d13co_2_1 < 250)])
 
-dc18o_2_1, lc18o_2_1 = np.loadtxt(datafolder+"horsehead-c18o2-1-smo.area", unpack=True, dtype=float)
-indx_c18o_2_1 = np.argwhere(lc18o_2_1 > 0)
-norm_c18o_2_1 = 6.54
-norm_c18o_2_1 = np.max(lc18o_2_1[np.logical_and(lc18o_2_1 > 0, dc18o_2_1 < 250)])
+# dc18o_2_1, lc18o_2_1 = np.loadtxt(datafolder+"horsehead-c18o2-1-smo.area", unpack=True, dtype=float)
+# indx_c18o_2_1 = np.argwhere(lc18o_2_1 > 0)
+# norm_c18o_2_1 = 6.54
+# norm_c18o_2_1 = np.max(lc18o_2_1[np.logical_and(lc18o_2_1 > 0, dc18o_2_1 < 250)])
 
-dc2, lc2 = np.loadtxt(datafolder+"horsehead-cii-smo.area", unpack=True, dtype=float)
-# norm_c2 = 28.1
-norm_c2 = np.max(lc2[np.logical_and(dc2 > 0, dc2 < 50)])
-indx_c2 = np.logical_and(lc2 > 0, dc2 < 250)
+# dc2, lc2 = np.loadtxt(datafolder+"horsehead-cii-smo.area", unpack=True, dtype=float)
+# # norm_c2 = 28.1
+# norm_c2 = np.max(lc2[np.logical_and(dc2 > 0, dc2 < 50)])
+# indx_c2 = np.logical_and(lc2 > 0, dc2 < 250)
 
-dc1, lc1 = np.loadtxt(datafolder+"horsehead-ci1-0-smo.area", unpack=True, dtype=float)
-norm_c1 = 9
-norm_c1 = np.max(lc1[np.logical_and(dc1 > 0, dc1 < 50)])
-indx_c1 = np.logical_and(lc1 > 0, dc1 < 250)
+# dc1, lc1 = np.loadtxt(datafolder+"horsehead-ci1-0-smo.area", unpack=True, dtype=float)
+# norm_c1 = 9
+# norm_c1 = np.max(lc1[np.logical_and(dc1 > 0, dc1 < 50)])
+# indx_c1 = np.logical_and(lc1 > 0, dc1 < 250)
 
-dh2o, lh2o = np.loadtxt(datafolder+"horsehead-h2o.area", unpack=True, dtype=float)
-indx_h2o = np.argwhere(lh2o > 0)
-norm_h2o = 0.26
-norm_h2o = np.max(lh2o[np.logical_and(dh2o > 0, dh2o < 50)])
+# dh2o, lh2o = np.loadtxt(datafolder+"horsehead-h2o.area", unpack=True, dtype=float)
+# indx_h2o = np.argwhere(lh2o > 0)
+# norm_h2o = 0.26
+# norm_h2o = np.max(lh2o[np.logical_and(dh2o > 0, dh2o < 50)])
 
-# find the distances between peaks
-peak_12co_2_1 = d12co_2_1[indx_12co_2_1][np.argmin(np.abs(l12co_2_1[indx_12co_2_1]/norm_12co_2_1-1.0))]
-peak_13co_2_1 = d13co_2_1[indx_13co_2_1][np.argmin(np.abs(l13co_2_1[indx_13co_2_1]/norm_13co_2_1-1.0))]
-peak_c18o_2_1 = dc18o_2_1[indx_c18o_2_1][np.argmin(np.abs(lc18o_2_1[indx_c18o_2_1]/norm_c18o_2_1-1.0))]
-peak_12co_4_3 = d12co_4_3[indx_12co_4_3][np.argmin(np.abs(l12co_4_3[indx_12co_4_3]/norm_12co_4_3-1.0))]
-peak_c2 = dc2[indx_c2][np.argmin(np.abs(lc2[indx_c2]/norm_c2-1.0))]
-peak_c1 = dc1[indx_c1][np.argmin(np.abs(lc1[indx_c1]/norm_c1-1.0))]
-peak_h2o = dh2o[indx_h2o][np.argmin(np.abs(lh2o[indx_h2o]/norm_h2o-1.0))]
+# # find the distances between peaks
+# peak_12co_2_1 = d12co_2_1[indx_12co_2_1][np.argmin(np.abs(l12co_2_1[indx_12co_2_1]/norm_12co_2_1-1.0))]
+# peak_13co_2_1 = d13co_2_1[indx_13co_2_1][np.argmin(np.abs(l13co_2_1[indx_13co_2_1]/norm_13co_2_1-1.0))]
+# peak_c18o_2_1 = dc18o_2_1[indx_c18o_2_1][np.argmin(np.abs(lc18o_2_1[indx_c18o_2_1]/norm_c18o_2_1-1.0))]
+# peak_12co_4_3 = d12co_4_3[indx_12co_4_3][np.argmin(np.abs(l12co_4_3[indx_12co_4_3]/norm_12co_4_3-1.0))]
+# peak_c2 = dc2[indx_c2][np.argmin(np.abs(lc2[indx_c2]/norm_c2-1.0))]
+# peak_c1 = dc1[indx_c1][np.argmin(np.abs(lc1[indx_c1]/norm_c1-1.0))]
+# peak_h2o = dh2o[indx_h2o][np.argmin(np.abs(lh2o[indx_h2o]/norm_h2o-1.0))]
 
 def dist_2_arcsec(dists, dist2obj=400*u.pc):
     """convert given distance array to arcsec
@@ -665,94 +666,203 @@ def column_density_profile(R, b, xarr, data):
 
     return col_density, los_loc_density, los
 
-def plot_column_densities(model, quantities, Rcloud_pc, barr_pc, resolution, lines=["n(C+ El=2P,J=3/2)", "n(C El=3P,J=1)", "n(CO v=0,J=2)", "n(CO v=0,J=4)", "n(H2O J=1,ka=1,kc=0)"], xvars="arcsec", xlim=None, plot_model=False, plot_dpdr=False, line_labels=None, legendloc="best", line_colors=None, savefolder="./", savename="convv_colden",save=False):
+# def plot_column_densities(model, quantities, Rcloud_pc, barr_pc, resolution, lines=["n(C+ El=2P,J=3/2)", "n(C El=3P,J=1)", "n(CO v=0,J=2)", "n(CO v=0,J=4)", "n(H2O J=1,ka=1,kc=0)"], xvars="arcsec", xlim=None, plot_model=False, plot_dpdr=False, line_labels=None, legendloc="best", line_colors=None, savefolder="./", savename="convv_colden",save=False):
     
-    model_x_cm = model[quantities["Distance"]]*u.cm
-    model_x_cm_unique, model_x_cm_unique_indices = np.unique(model_x_cm, return_index=True)
-    resolution_xunit = arcsec_2_dist(resolution*u.arcsec, "cm")
+#     model_x_cm = model[quantities["Distance"]]*u.cm
+#     model_x_cm_unique, model_x_cm_unique_indices = np.unique(model_x_cm, return_index=True)
+#     resolution_xunit = arcsec_2_dist(resolution*u.arcsec, "cm")
     
-    column_densities = []
-    convv_column_densities = []
-    convv_xs = []
+#     column_densities = []
+#     convv_column_densities = []
+#     convv_xs = []
 
-    Rcloud_cm = Rcloud_pc.to(u.cm).value
-    barr_cm = barr_pc.to(u.cm).value
+#     Rcloud_cm = Rcloud_pc.to(u.cm).value
+#     barr_cm = barr_pc.to(u.cm).value
     
-    for line in lines:
-        yval = model[quantities[line]]
-        column_density_y = np.zeros_like(barr_cm, dtype=float)
+#     for line in lines:
+#         yval = model[quantities[line]]
+#         column_density_y = np.zeros_like(barr_cm, dtype=float)
 
-        func_loc_density = interp1d(model_x_cm_unique, yval[model_x_cm_unique_indices])
+#         func_loc_density = interp1d(model_x_cm_unique, yval[model_x_cm_unique_indices])
 
-        for i, b in enumerate(barr_cm):
-            column_density_y[i], _, _ = column_density(Rcloud_cm, b, model_x_cm, yval, func_loc_density=func_loc_density)
+#         for i, b in enumerate(barr_cm):
+#             column_density_y[i], _, _ = column_density(Rcloud_cm, b, model_x_cm, yval, func_loc_density=func_loc_density)
     
-        convv_column_density, convv_x = convolve_uniform(Rcloud_cm - barr_cm, column_density_y, resolution=resolution_xunit.value, gridsize=500, expandx=True)
+#         convv_column_density, convv_x = convolve_uniform(Rcloud_cm - barr_cm, column_density_y, resolution=resolution_xunit.value, gridsize=500, expandx=True)
         
-        column_densities.append(column_density_y)
-        convv_column_densities.append(convv_column_density)
-        convv_xs.append(convv_x)
+#         column_densities.append(column_density_y)
+#         convv_column_densities.append(convv_column_density)
+#         convv_xs.append(convv_x)
     
-    if line_labels is None:
-        line_labels = ["N(C+ El=2P,J=3/2)", "N(C El=3P,J=1)", "N(CO v=0,J=2)", "N(CO v=0,J=4)", "N(H2O J=1,ka=1,kc=0)"]
-    if line_colors is None:
-        line_colors = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple"]
+#     if line_labels is None:
+#         line_labels = ["N(C+ El=2P,J=3/2)", "N(C El=3P,J=1)", "N(CO v=0,J=2)", "N(CO v=0,J=4)", "N(H2O J=1,ka=1,kc=0)"]
+#     if line_colors is None:
+#         line_colors = ["tab:blue", "tab:orange", "tab:green", "tab:red", "tab:purple"]
 
-    fig, axs = plt.subplots(1, 3, figsize=(11, 4))
-    ax_twin = axs[2].twinx()
-    ax_twin.set_yticks([])
+#     fig, axs = plt.subplots(1, 3, figsize=(11, 4))
+#     ax_twin = axs[2].twinx()
+#     ax_twin.set_yticks([])
 
-    if plot_model: 
-        ax_twin.plot(np.nan, np.nan, "k:", label="N(X) original")
-    ax_twin.plot(np.nan, np.nan, "k-", label="N(X) convolved")
-    ax_twin.plot(np.nan, np.nan, "k--", label="observation")
+#     if plot_model: 
+#         ax_twin.plot(np.nan, np.nan, "k:", label="N(X) original")
+#     ax_twin.plot(np.nan, np.nan, "k-", label="N(X) convolved")
+#     ax_twin.plot(np.nan, np.nan, "k--", label="observation")
 
-    axs[0].plot(dc2[indx_c2], lc2[indx_c2]/norm_c2, "--", c=line_colors[0], alpha=0.7)
-    axs[0].plot(dc1[indx_c1], lc1[indx_c1]/norm_c1, "--", c=line_colors[1], alpha=0.7)
+#     axs[0].plot(dc2[indx_c2], lc2[indx_c2]/norm_c2, "--", c=line_colors[0], alpha=0.7)
+#     axs[0].plot(dc1[indx_c1], lc1[indx_c1]/norm_c1, "--", c=line_colors[1], alpha=0.7)
 
-    axs[1].plot(d12co_2_1[indx_12co_2_1], l12co_2_1[indx_12co_2_1]/norm_12co_2_1, "--", c=line_colors[2], alpha=0.7)
-    axs[1].plot(d12co_4_3[indx_12co_4_3], l12co_4_3[indx_12co_4_3]/norm_12co_4_3, "--", c=line_colors[3], alpha=0.7) 
-    axs[2].plot(dh2o[indx_h2o], lh2o[indx_h2o]/norm_h2o, "s--", c=line_colors[4], alpha=0.7)
+#     axs[1].plot(d12co_2_1[indx_12co_2_1], l12co_2_1[indx_12co_2_1]/norm_12co_2_1, "--", c=line_colors[2], alpha=0.7)
+#     axs[1].plot(d12co_4_3[indx_12co_4_3], l12co_4_3[indx_12co_4_3]/norm_12co_4_3, "--", c=line_colors[3], alpha=0.7) 
+#     axs[2].plot(dh2o[indx_h2o], lh2o[indx_h2o]/norm_h2o, "s--", c=line_colors[4], alpha=0.7)
 
-    darr_arcsec = dist_2_arcsec(Rcloud_pc-barr_pc)
+#     darr_arcsec = dist_2_arcsec(Rcloud_pc-barr_pc)
 
-    for iline, line in enumerate(lines):
-        if plot_model: max_column_density = column_densities[iline].max()
-        max_convv_column_density = convv_column_densities[iline].max()
+#     for iline, line in enumerate(lines):
+#         if plot_model: max_column_density = column_densities[iline].max()
+#         max_convv_column_density = convv_column_densities[iline].max()
         
-        if iline < 2:
-            if plot_model:
-                axs[0].plot(darr_arcsec, column_densities[iline]/max_column_density, ":", c=line_colors[iline])
-            axs[0].plot(dist_2_arcsec(convv_xs[iline]*u.cm), convv_column_densities[iline]/max_convv_column_density, "-", c=line_colors[iline], label=line_labels[iline])
-        elif iline < 4:
-            if plot_model:
-                axs[1].plot(darr_arcsec, column_densities[iline]/max_column_density, ":", c=line_colors[iline])
-            axs[1].plot(dist_2_arcsec(convv_xs[iline]*u.cm), convv_column_densities[iline]/max_convv_column_density, "-", c=line_colors[iline], label=line_labels[iline])
-        else:
-            if plot_model:
-                axs[2].plot(darr_arcsec, column_densities[iline]/max_column_density, ":", c=line_colors[iline])
-            axs[2].plot(dist_2_arcsec(convv_xs[iline]*u.cm), convv_column_densities[iline]/max_convv_column_density, "-", c=line_colors[iline], label=line_labels[iline])
-        plt.plot()
+#         if iline < 2:
+#             if plot_model:
+#                 axs[0].plot(darr_arcsec, column_densities[iline]/max_column_density, ":", c=line_colors[iline])
+#             axs[0].plot(dist_2_arcsec(convv_xs[iline]*u.cm), convv_column_densities[iline]/max_convv_column_density, "-", c=line_colors[iline], label=line_labels[iline])
+#         elif iline < 4:
+#             if plot_model:
+#                 axs[1].plot(darr_arcsec, column_densities[iline]/max_column_density, ":", c=line_colors[iline])
+#             axs[1].plot(dist_2_arcsec(convv_xs[iline]*u.cm), convv_column_densities[iline]/max_convv_column_density, "-", c=line_colors[iline], label=line_labels[iline])
+#         else:
+#             if plot_model:
+#                 axs[2].plot(darr_arcsec, column_densities[iline]/max_column_density, ":", c=line_colors[iline])
+#             axs[2].plot(dist_2_arcsec(convv_xs[iline]*u.cm), convv_column_densities[iline]/max_convv_column_density, "-", c=line_colors[iline], label=line_labels[iline])
+#         plt.plot()
 
-    for ax in axs:
-        ax.set(xlim=xlim, ylim=[-0.1, 1.1], xlabel=f"d [{u.arcsec}]")
+#     for ax in axs:
+#         ax.set(xlim=xlim, ylim=[-0.1, 1.1], xlabel=f"d [{u.arcsec}]")
 
-    ax_twin.legend(loc="upper left")
-    axs[0].set_ylabel("Normalized N(X)")
-    axs[0].text(0.01, 0.95, f"R = {Rcloud_pc:.1f}", transform=axs[0].transAxes)
-    axs[0].legend(loc="lower left")
-    axs[1].legend(loc="lower left")
-    axs[2].legend(loc="lower left")
+#     ax_twin.legend(loc="upper left")
+#     axs[0].set_ylabel("Normalized N(X)")
+#     axs[0].text(0.01, 0.95, f"R = {Rcloud_pc:.1f}", transform=axs[0].transAxes)
+#     axs[0].legend(loc="lower left")
+#     axs[1].legend(loc="lower left")
+#     axs[2].legend(loc="lower left")
 
-    axs[1].set_yticks([])
-    axs[2].set_yticks([])
+#     axs[1].set_yticks([])
+#     axs[2].set_yticks([])
 
-    fig.tight_layout(w_pad=0, h_pad=0)
+#     fig.tight_layout(w_pad=0, h_pad=0)
 
-    if save: fig.savefig(savefolder+savename+".pdf", bbox_inches="tight", pad_inches=0)
+#     if save: fig.savefig(savefolder+savename+".pdf", bbox_inches="tight", pad_inches=0)
 
-    return column_densities, convv_column_densities, convv_xs
+#     return column_densities, convv_column_densities, convv_xs
 
 ##### solving radiative transfer equation #####
 def energy_K2erg(energy_K):
     return (const.k_B*energy_K*u.K).to(u.erg)
+
+def get_line_data(linedat, leveldat, bkg_intensity, nl, nu):
+    """Get line information needed for solving the radiative transfer equation:
+    Einstein coefficients, energy, and background intensity at the line frequency.
+
+
+    Args:
+        linedat (ndarray): line data, read from MeudonPDR
+        leveldat (ndarray): level data, read from MeudonPDR
+        bkg_intensity (ndarray): background intensity, read from MeudonPDR
+        nl (int): level index of lower level, as defined in MeudonPDR
+        nu (int): level index of upper level, as defined in MeudonPDR
+
+    Returns:
+        tuple: Energy, Einstein coefficient, Einstein coefficients Aul, Bul, and Blu, background intensity at the line frequency
+    """
+    gl = next(g for n, g in zip(leveldat["n"], leveldat["g"]) if n == nl)
+    gu = next(g for n, g in zip(leveldat["n"], leveldat["g"]) if n == nu)
+
+    eng = energy_K2erg(linedat["E"][np.logical_and(linedat["nu"] == nu, linedat["nl"] == nl)])
+    nuul = (eng/const.h).to(u.Hz)
+    lambul = (const.c/nuul).to(u.AA)
+    Aul = linedat["Aul"][np.logical_and(linedat["nu"] == nu, linedat["nl"] == nl)][0]/u.s
+    Bul = (Aul*const.c**2/(2*const.h*nuul**3)).cgs
+    Blu = gu*Bul/gl
+    
+    # the unit of bkg_intensity is erg/(cm^2 s sr AA), need to convert to erg/(cm^2 s sr Hz)
+    I0 = ((bkg_intensity[2][np.argmin(np.abs(bkg_intensity[0] - lambul.value))]*u.erg/(u.cm**2*u.s*u.sr*u.AA)*lambul**2/const.c).cgs).value[0]
+
+    return eng, Aul, Bul, Blu, I0
+
+def solve_exact_rte(eng, Aul, Bul, Blu, I0, Rcloud_pc, distance_cm, density_l, density_u, lineprofile=None):
+
+    eng_per_4pi = eng/4/np.pi/u.sr
+
+    Rcloud_cm = (Rcloud_pc.to(u.cm)).value
+    dmax = distance_cm[-1]
+    barr_cm = np.linspace(0.999*Rcloud_cm, Rcloud_cm - dmax, 50)
+    print("darr", (Rcloud_cm - barr_cm)*u.cm.to(u.pc))
+    print("I0", I0)
+    
+    intensities = []
+    tvals = []
+    for b_cm in barr_cm:
+
+        print(f"Solving the LOS with d = {(Rcloud_cm - b_cm)*u.cm.to(u.pc)} pc")
+
+        smid = np.sqrt(Rcloud_cm**2 - b_cm**2)
+        
+        # Solve ODE
+        rte_sol = solve_ivp(
+            fun=func_dInuds,
+            t_span=[0, smid*2],
+            y0=[I0],
+            t_eval=np.linspace(0, smid*2, 1000),  
+            method="BDF",
+            args=[smid, b_cm, Rcloud_cm, Aul.value, Bul.value, Blu.value, eng_per_4pi.value, distance_cm, density_u, density_l],
+            rtol=1e-6,
+            atol=1e-30
+        )
+        if rte_sol.success:
+            intensities.append(rte_sol.y)
+            tvals.append(rte_sol.t)
+            print("Integration succeeded:", rte_sol.message)
+        else:
+            print("Integration failed:", rte_sol.message)
+
+    return intensities, tvals, barr_cm
+
+@jit(nopython=True)
+def interpolate_density(distance_cm, density, x):
+    """
+    Perform linear interpolation manually. Assumes distance_cm is sorted.
+    """
+    for i in range(len(distance_cm) - 1):
+        if distance_cm[i] <= x <= distance_cm[i + 1]:
+            t = (x - distance_cm[i]) / (distance_cm[i + 1] - distance_cm[i])
+            return density[i] * (1 - t) + density[i + 1] * t
+    raise ValueError("x out of bounds")
+
+@jit(nopython=True)
+def los_density_u(s, smid, b_cm, Rcloud_cm, distance_cm, density_u):
+    """
+    Computes line-of-sight density for the upper state.
+    """
+    d = Rcloud_cm - np.sqrt((s - smid) ** 2 + b_cm ** 2)
+    return interpolate_density(distance_cm, density_u, d)
+
+@jit(nopython=True)
+def los_density_l(s, smid, b_cm, Rcloud_cm, distance_cm, density_l):
+    """
+    Computes line-of-sight density for the lower state.
+    """
+    d = Rcloud_cm - np.sqrt((s - smid) ** 2 + b_cm ** 2)
+    return interpolate_density(distance_cm, density_l, d)
+
+@jit(nopython=True)
+def func_dInuds(s, Inu, smid, b_cm, Rcloud_cm, Aul, Bul, Blu, eng_per_4pi, distance_cm, density_u, density_l):
+
+    density_u = los_density_u(s, smid, b_cm, Rcloud_cm, distance_cm, density_u)
+    density_l = los_density_l(s, smid, b_cm, Rcloud_cm, distance_cm, density_l)
+    
+    term1 = Aul * density_u
+    term2 = Bul * density_u * Inu
+    term3 = -Blu * density_l * Inu
+
+    dInuds = (term1 + term2 + term3) * eng_per_4pi
+    
+    return dInuds
